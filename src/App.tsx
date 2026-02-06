@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Marketing from "./pages/Marketing";
 import Booking from "./pages/Booking";
 import Budget from "./pages/Budget";
+import Customers from "./pages/Customers";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/marketing" element={<Marketing />} />
             <Route path="/booking" element={<Booking />} />
             <Route path="/budget" element={<Budget />} />
+            <Route path="/customers" element={<Customers />} />
             <Route path="/settings" element={<Settings />} />
           </Route>
           <Route path="*" element={<NotFound />} />

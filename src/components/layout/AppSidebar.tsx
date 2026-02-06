@@ -19,6 +19,7 @@ import {
   Megaphone,
   Calendar,
   Wallet,
+  Users,
   Settings,
   Zap,
   ChevronLeft,
@@ -30,6 +31,7 @@ import { cn } from "@/lib/utils";
 const mainItems = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Marketing", url: "/marketing", icon: Megaphone },
+  { title: "Customers", url: "/customers", icon: Users },
   { title: "Booking", url: "/booking", icon: Calendar },
   { title: "Budget", url: "/budget", icon: Wallet },
 ];
