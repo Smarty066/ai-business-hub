@@ -26,40 +26,63 @@ interface GeneratedContent {
   landingPage: { hero: string; features: string[]; cta: string };
 }
 
-const mockContent: GeneratedContent = {
-  headlines: [
-    "Transform Your Business with AI-Powered Solutions",
-    "Boost Productivity by 300% – See How",
-    "The Future of Work is Here – Don't Get Left Behind",
-  ],
-  ads: [
-    "🚀 Ready to 10x your productivity? Our AI suite handles marketing, booking, and finances – so you can focus on growth. Try it free today!",
-    "💡 Smart business owners use AI. Generate marketing content, manage appointments, and track finances in one place. Start your free trial!",
-    "⚡ Stop wasting hours on repetitive tasks. Let AI do the heavy lifting while you build your empire. Get started in 2 minutes.",
-  ],
-  emails: [
-    {
-      subject: "Your competitors are using AI – Are you?",
-      body: "Hi there,\n\nIn today's fast-paced business environment, staying ahead means working smarter, not harder.\n\nOur AI Productivity Suite helps you:\n• Generate compelling marketing content in seconds\n• Automate booking and scheduling\n• Get AI-powered financial insights\n\nJoin 10,000+ businesses already saving 10+ hours per week.\n\nBest,\nThe Smart AI Team",
-    },
-    {
-      subject: "Quick question about your marketing...",
-      body: "Hi,\n\nI noticed you might be spending too much time on content creation.\n\nWhat if you could generate:\n• Sales copy\n• Ad variations\n• Email sequences\n• Landing pages\n\n...all in under 5 minutes?\n\nLet me show you how.\n\nCheers,\nThe Smart AI Team",
-    },
-    {
-      subject: "Save 10 hours this week (here's how)",
-      body: "Hey there,\n\nTime is your most valuable asset.\n\nOur users save an average of 10 hours per week by automating:\n✓ Marketing content generation\n✓ Appointment scheduling\n✓ Financial tracking and insights\n\nReady to get those hours back?\n\nStart your free trial today.\n\nBest,\nThe Smart AI Team",
-    },
-  ],
-  landingPage: {
-    hero: "Supercharge Your Business with AI-Powered Automation. Generate marketing content, manage bookings, and track finances – all in one intelligent platform.",
-    features: [
-      "AI Marketing Generator – Create compelling copy in seconds",
-      "Smart Booking System – Automated scheduling with queue management",
-      "Financial Insights – AI-powered expense tracking and recommendations",
+const generateContent = (data: { productName: string; description: string; audience: string; tone: string; goal: string }): GeneratedContent => {
+  const { productName, description, audience, tone, goal } = data;
+  const name = productName || "Your Product";
+  const desc = description || "an innovative solution";
+  const aud = audience || "your target audience";
+
+  const toneMap: Record<string, { adj: string; verb: string; cta: string }> = {
+    professional: { adj: "Transform", verb: "Elevate", cta: "Get Started Today" },
+    casual: { adj: "Level Up", verb: "Try Out", cta: "Jump In – It's Free!" },
+    friendly: { adj: "Discover", verb: "Explore", cta: "Come See What's New!" },
+    urgent: { adj: "Act Now –", verb: "Don't Wait –", cta: "Claim Your Spot Before It's Gone!" },
+  };
+  const goalMap: Record<string, string> = {
+    awareness: "spreading the word about",
+    leads: "capturing leads for",
+    sales: "driving sales of",
+    engagement: "boosting engagement with",
+  };
+
+  const t = toneMap[tone] || toneMap.professional;
+  const goalPhrase = goalMap[goal] || "promoting";
+
+  return {
+    headlines: [
+      `${t.adj} Your Experience with ${name}`,
+      `Why ${aud} Are Choosing ${name}`,
+      `${t.verb} the Way You Work – Powered by ${name}`,
     ],
-    cta: "Start Your Free Trial – No Credit Card Required",
-  },
+    ads: [
+      `🚀 ${name} – ${desc}. Built for ${aud} who want results. ${t.cta}`,
+      `💡 Stop settling for less. ${name} helps ${aud} achieve more with ${desc}. Try it free today!`,
+      `⚡ ${t.verb} your workflow with ${name}. Perfect for ${goalPhrase} ${name.toLowerCase()}. Get started in 2 minutes.`,
+    ],
+    emails: [
+      {
+        subject: `${aud} – here's how ${name} can help you`,
+        body: `Hi there,\n\nWe built ${name} specifically for ${aud}.\n\n${name} is ${desc}.\n\nHere's what you'll get:\n• Tailored solutions for ${aud}\n• Designed for ${goalPhrase} your business\n• Easy to start, powerful to scale\n\n${t.cta}\n\nBest,\nThe ${name} Team`,
+      },
+      {
+        subject: `Quick question about ${goalPhrase} your business...`,
+        body: `Hi,\n\nAre you spending too much time on ${goalPhrase} your products?\n\nWith ${name}, ${aud} can:\n• Save time with automation\n• Get better results faster\n• Focus on what matters most\n\n${desc} – and it's ready for you today.\n\nCheers,\nThe ${name} Team`,
+      },
+      {
+        subject: `${t.adj} your results this week`,
+        body: `Hey there,\n\nTime is your most valuable asset.\n\n${name} was designed for ${aud} who need:\n✓ ${desc}\n✓ Tools focused on ${goalPhrase} your business\n✓ Results you can measure\n\n${t.cta}\n\nBest,\nThe ${name} Team`,
+      },
+    ],
+    landingPage: {
+      hero: `${t.adj} Your Business with ${name}. ${desc.charAt(0).toUpperCase() + desc.slice(1)} – built specifically for ${aud}.`,
+      features: [
+        `Tailored for ${aud} – solutions designed around your needs`,
+        `${name} delivers ${desc} with ease`,
+        `Optimized for ${goalPhrase} your business at every stage`,
+      ],
+      cta: t.cta,
+    },
+  };
 };
 
 export default function Marketing() {
@@ -77,7 +100,7 @@ export default function Marketing() {
     setIsGenerating(true);
     // Simulate AI generation
     await new Promise((resolve) => setTimeout(resolve, 2000));
-    setContent(mockContent);
+    setContent(generateContent(formData));
     setIsGenerating(false);
     toast.success("Content generated successfully!");
   };
