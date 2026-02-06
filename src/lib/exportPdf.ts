@@ -1,11 +1,5 @@
 import jsPDF from "jspdf";
-
-interface GeneratedContent {
-  headlines: string[];
-  ads: string[];
-  emails: { subject: string; body: string }[];
-  landingPage: { hero: string; features: string[]; cta: string };
-}
+import type { GeneratedContent } from "./marketingGenerator";
 
 export function exportMarketingPdf(
   content: GeneratedContent,
@@ -30,7 +24,6 @@ export function exportMarketingPdf(
     doc.setFont("helvetica", "bold");
     doc.text(text, margin, y);
     y += 10;
-    // underline
     doc.setDrawColor(0, 180, 180);
     doc.setLineWidth(0.5);
     doc.line(margin, y, margin + doc.getTextWidth(text), y);
@@ -92,6 +85,29 @@ export function exportMarketingPdf(
     y += 2;
   });
   y += 4;
+
+  // WhatsApp Messages
+  if (content.whatsapp?.length) {
+    addTitle("WhatsApp Messages");
+    content.whatsapp.forEach((msg, i) => {
+      addSubtitle(`${i + 1}. ${msg.title}`);
+      addBody(msg.message);
+      y += 2;
+    });
+    y += 4;
+  }
+
+  // Social Media Posts
+  if (content.socialMedia?.length) {
+    addTitle("Social Media Posts");
+    content.socialMedia.forEach((post) => {
+      addSubtitle(`${post.icon} ${post.platform}`);
+      addBody(post.post);
+      addBody(`Hashtags: ${post.hashtags.map((h) => `#${h}`).join(" ")}`);
+      y += 2;
+    });
+    y += 4;
+  }
 
   // Landing Page
   addTitle("Landing Page Content");

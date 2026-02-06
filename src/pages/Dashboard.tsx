@@ -22,11 +22,19 @@ const stats = [
 const quickActions = [
   {
     title: "Generate Marketing Content",
-    description: "Create sales copy, ads, and emails",
+    description: "Create ads, emails, WhatsApp & social posts",
     icon: Megaphone,
     href: "/marketing",
     color: "text-primary",
     bgColor: "bg-primary/10",
+  },
+  {
+    title: "Customer Follow-Up",
+    description: "Track leads and never miss a follow-up",
+    icon: Users,
+    href: "/customers",
+    color: "text-accent",
+    bgColor: "bg-accent/10",
   },
   {
     title: "Manage Bookings",
@@ -78,7 +86,7 @@ export default function Dashboard() {
       {/* Quick Actions */}
       <div className="mb-8">
         <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           {quickActions.map((action, index) => (
             <Card 
               key={action.title} 
