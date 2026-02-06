@@ -20,6 +20,8 @@ import {
   Calendar,
   Wallet,
   Users,
+  BookOpen,
+  CreditCard,
   Settings,
   Zap,
   ChevronLeft,
@@ -34,6 +36,8 @@ const mainItems = [
   { title: "Customers", url: "/customers", icon: Users },
   { title: "Booking", url: "/booking", icon: Calendar },
   { title: "Budget", url: "/budget", icon: Wallet },
+  { title: "Bookkeeping", url: "/bookkeeping", icon: BookOpen },
+  { title: "Pricing", url: "/pricing", icon: CreditCard },
 ];
 
 const settingsItems = [
