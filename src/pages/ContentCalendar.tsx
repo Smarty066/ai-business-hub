@@ -6,6 +6,9 @@ import { CalendarStats } from "@/components/calendar/CalendarStats";
 import { WeekGrid } from "@/components/calendar/WeekGrid";
 import { NewPostDialog } from "@/components/calendar/NewPostDialog";
 import { type ScheduledPost } from "@/components/calendar/PostCard";
+import { useFreemiumGate } from "@/hooks/useFreemiumGate";
+import { UsageMeter } from "@/components/freemium/UsageMeter";
+import { UpgradeDialog } from "@/components/freemium/UpgradeDialog";
 
 // Seed demo posts relative to current week
 function generateDemoPosts(): ScheduledPost[] {
@@ -81,6 +84,7 @@ export default function ContentCalendar() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingPost, setEditingPost] = useState<ScheduledPost | null>(null);
   const [defaultDate, setDefaultDate] = useState<Date>(new Date());
+  const gate = useFreemiumGate();
 
   const handlePrevWeek = useCallback(() => setCurrentWeek((w) => subWeeks(w, 1)), []);
   const handleNextWeek = useCallback(() => setCurrentWeek((w) => addWeeks(w, 1)), []);
@@ -127,6 +131,10 @@ export default function ContentCalendar() {
     [editingPost]
   );
 
+  const handleAITemplate = useCallback((): boolean => {
+    return gate.tryConsume();
+  }, [gate]);
+
   return (
     <div className="p-6 lg:p-8 max-w-[1400px] mx-auto space-y-6">
       <CalendarHeader
@@ -137,6 +145,8 @@ export default function ContentCalendar() {
         onNewPost={handleNewPost}
         postCount={posts.length}
       />
+
+      <UsageMeter used={gate.used} limit={gate.limit} />
 
       <CalendarStats posts={posts} />
 
@@ -154,7 +164,10 @@ export default function ContentCalendar() {
         onSave={handleSavePost}
         editingPost={editingPost}
         defaultDate={defaultDate}
+        onAITemplate={handleAITemplate}
       />
+
+      <UpgradeDialog open={gate.showUpgrade} onOpenChange={gate.closeUpgrade} />
     </div>
   );
 }

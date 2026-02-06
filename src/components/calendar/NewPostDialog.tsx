@@ -34,6 +34,7 @@ interface NewPostDialogProps {
   onSave: (post: Omit<ScheduledPost, "id">) => void;
   editingPost?: ScheduledPost | null;
   defaultDate?: Date;
+  onAITemplate?: () => boolean; // Returns false if limit reached
 }
 
 const timeSlots = [
@@ -57,6 +58,7 @@ export function NewPostDialog({
   onSave,
   editingPost,
   defaultDate,
+  onAITemplate,
 }: NewPostDialogProps) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -84,6 +86,11 @@ export function NewPostDialog({
   }, [editingPost, defaultDate, open]);
 
   const handleAutoGenerate = () => {
+    // Check freemium gate if provided
+    if (onAITemplate) {
+      const allowed = onAITemplate();
+      if (!allowed) return;
+    }
     setContent(contentTemplates[platform]);
     if (!title) setTitle(`${platformConfig[platform].label} Post`);
   };
