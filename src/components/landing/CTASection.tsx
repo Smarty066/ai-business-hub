@@ -1,6 +1,12 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Zap } from "lucide-react";
+import { ArrowRight, Zap, CheckCircle2 } from "lucide-react";
+
+const perks = [
+  "Free Starter plan — ₦0 forever",
+  "No credit card required",
+  "Full access to all 5 modules",
+];
 
 export function CTASection() {
   return (
@@ -18,12 +24,22 @@ export function CTASection() {
             </div>
 
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Ready to Transform Your Workflow?
+              Ready to <span className="text-gradient">Work Smarter?</span>
             </h2>
 
-            <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-8">
-              Join thousands of entrepreneurs and businesses saving hours every week with AI-powered automation.
+            <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-6">
+              Join 2,400+ businesses already saving 15+ hours every week with AI-powered automation.
             </p>
+
+            {/* Perks */}
+            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mb-8">
+              {perks.map((p) => (
+                <div key={p} className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                  <CheckCircle2 className="h-4 w-4 text-success" />
+                  <span>{p}</span>
+                </div>
+              ))}
+            </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button variant="hero" size="xl" asChild>
@@ -33,7 +49,7 @@ export function CTASection() {
                 </Link>
               </Button>
               <Button variant="outline" size="lg" asChild>
-                <Link to="/dashboard">Schedule Demo</Link>
+                <Link to="/pricing">Compare Plans</Link>
               </Button>
             </div>
           </div>
