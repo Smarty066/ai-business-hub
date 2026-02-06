@@ -4,13 +4,19 @@ import { toast } from "sonner";
 import { generateContent, type GeneratedContent, type MarketingFormData } from "@/lib/marketingGenerator";
 import { MarketingForm } from "@/components/marketing/MarketingForm";
 import { ContentOutput } from "@/components/marketing/ContentOutput";
+import { useFreemiumGate } from "@/hooks/useFreemiumGate";
+import { UsageMeter } from "@/components/freemium/UsageMeter";
+import { UpgradeDialog } from "@/components/freemium/UpgradeDialog";
 
 export default function Marketing() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [content, setContent] = useState<GeneratedContent | null>(null);
   const [productName, setProductName] = useState("");
+  const gate = useFreemiumGate();
 
   const handleGenerate = async (formData: MarketingFormData) => {
+    if (!gate.tryConsume()) return;
+
     setIsGenerating(true);
     setProductName(formData.productName);
     await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -34,10 +40,16 @@ export default function Marketing() {
         </p>
       </div>
 
+      {/* Usage Meter */}
+      <UsageMeter used={gate.used} limit={gate.limit} className="mb-6" />
+
       <div className="grid lg:grid-cols-5 gap-6">
         <MarketingForm onGenerate={handleGenerate} isGenerating={isGenerating} />
         <ContentOutput content={content} productName={productName} />
       </div>
+
+      {/* Upgrade Dialog */}
+      <UpgradeDialog open={gate.showUpgrade} onOpenChange={gate.closeUpgrade} />
     </div>
   );
 }
