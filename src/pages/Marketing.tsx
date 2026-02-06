@@ -18,6 +18,7 @@ import {
   Layout,
 } from "lucide-react";
 import { toast } from "sonner";
+import { exportMarketingPdf } from "@/lib/exportPdf";
 
 interface GeneratedContent {
   headlines: string[];
@@ -370,11 +371,18 @@ export default function Marketing() {
                     <p className="font-medium text-primary">{content.landingPage.cta}</p>
                   </div>
 
-                  <Button variant="outline" className="w-full">
+                  <Button variant="outline" className="w-full" onClick={() => { exportMarketingPdf(content, formData.productName); toast.success("PDF downloaded!"); }}>
                     <Download className="h-4 w-4 mr-2" />
-                    Export as HTML
+                    Export as PDF
                   </Button>
                 </TabsContent>
+
+                <div className="pt-4 border-t border-border mt-4">
+                  <Button variant="hero" className="w-full" onClick={() => { exportMarketingPdf(content, formData.productName); toast.success("PDF downloaded!"); }}>
+                    <Download className="h-4 w-4 mr-2" />
+                    Export All Content as PDF
+                  </Button>
+                </div>
               </Tabs>
             ) : (
               <div className="flex flex-col items-center justify-center py-12 text-center">
