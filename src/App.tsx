@@ -12,7 +12,7 @@ import Budget from "./pages/Budget";
 import Customers from "./pages/Customers";
 import Bookkeeping from "./pages/Bookkeeping";
 import Pricing from "./pages/Pricing";
-import ContentCalendar from "./pages/ContentCalendar";
+
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
@@ -33,7 +33,7 @@ const App = () => (
             <Route path="/budget" element={<Budget />} />
             <Route path="/customers" element={<Customers />} />
             <Route path="/bookkeeping" element={<Bookkeeping />} />
-            <Route path="/content-calendar" element={<ContentCalendar />} />
+            
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/settings" element={<Settings />} />
           </Route>
