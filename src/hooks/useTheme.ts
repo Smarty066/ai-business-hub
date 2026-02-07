@@ -1,0 +1,28 @@
+import { useEffect, useState, useCallback } from "react";
+
+type Theme = "dark" | "light";
+
+function getStoredTheme(): Theme {
+  if (typeof window === "undefined") return "dark";
+  return (localStorage.getItem("theme") as Theme) || "dark";
+}
+
+export function useTheme() {
+  const [theme, setThemeState] = useState<Theme>(getStoredTheme);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === "light") {
+      root.classList.add("light");
+    } else {
+      root.classList.remove("light");
+    }
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = useCallback(() => {
+    setThemeState((prev) => (prev === "dark" ? "light" : "dark"));
+  }, []);
+
+  return { theme, toggleTheme };
+}

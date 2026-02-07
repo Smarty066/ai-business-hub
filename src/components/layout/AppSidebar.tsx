@@ -14,6 +14,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { NavLink } from "@/components/NavLink";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   LayoutDashboard,
   Megaphone,
@@ -138,7 +139,13 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-sidebar-border p-2">
+      <SidebarFooter className="border-t border-sidebar-border p-2 space-y-1">
+        <div className={cn("flex items-center", collapsed ? "justify-center" : "justify-between px-2")}>
+          {!collapsed && (
+            <span className="text-xs text-muted-foreground">Theme</span>
+          )}
+          <ThemeToggle />
+        </div>
         <Button
           variant="ghost"
           size="sm"
