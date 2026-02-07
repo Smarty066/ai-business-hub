@@ -10,7 +10,7 @@ import {
   FileText,
   ArrowRight,
   Sparkles,
-  BookOpen,
+  Package,
 } from "lucide-react";
 
 const stats = [
@@ -54,10 +54,10 @@ const quickActions = [
     bgColor: "bg-warning/10",
   },
   {
-    title: "Bookkeeping",
+    title: "Inventory",
     description: "Manage inventory & restock alerts",
-    icon: BookOpen,
-    href: "/bookkeeping",
+    icon: Package,
+    href: "/inventory",
     color: "text-primary",
     bgColor: "bg-primary/10",
   },

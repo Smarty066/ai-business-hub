@@ -19,10 +19,9 @@ import {
   LayoutDashboard,
   Megaphone,
   Calendar,
-  
+  Package,
   Wallet,
   Users,
-  BookOpen,
   CreditCard,
   Settings,
   Zap,
@@ -38,7 +37,7 @@ const mainItems = [
   { title: "Customers", url: "/customers", icon: Users },
   { title: "Booking", url: "/booking", icon: Calendar },
   { title: "Budget", url: "/budget", icon: Wallet },
-  { title: "Bookkeeping", url: "/bookkeeping", icon: BookOpen },
+  { title: "Inventory", url: "/inventory", icon: Package },
   
   { title: "Pricing", url: "/pricing", icon: CreditCard },
 ];

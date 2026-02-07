@@ -10,7 +10,7 @@ import Marketing from "./pages/Marketing";
 import Booking from "./pages/Booking";
 import Budget from "./pages/Budget";
 import Customers from "./pages/Customers";
-import Bookkeeping from "./pages/Bookkeeping";
+import Inventory from "./pages/Inventory";
 import Pricing from "./pages/Pricing";
 
 import Settings from "./pages/Settings";
@@ -32,7 +32,7 @@ const App = () => (
             <Route path="/booking" element={<Booking />} />
             <Route path="/budget" element={<Budget />} />
             <Route path="/customers" element={<Customers />} />
-            <Route path="/bookkeeping" element={<Bookkeeping />} />
+            <Route path="/inventory" element={<Inventory />} />
             
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/settings" element={<Settings />} />

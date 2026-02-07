@@ -38,7 +38,7 @@ const plans = [
       { name: "Basic budget tracker", included: true },
       { name: "Up to 20 customers", included: true },
       { name: "5 bookings/month", included: true },
-      { name: "Basic bookkeeping", included: true },
+      { name: "Basic inventory tracking", included: true },
       { name: "Community support", included: true },
       { name: "Unlimited generations", included: false },
       { name: "Advanced AI insights", included: false },
@@ -62,7 +62,7 @@ const plans = [
       { name: "Full budget & finance suite", included: true },
       { name: "Unlimited customers", included: true },
       { name: "Unlimited bookings", included: true },
-      { name: "Full bookkeeping with restock alerts", included: true },
+      { name: "Full inventory with restock alerts", included: true },
       { name: "Priority support", included: true },
       { name: "Advanced AI insights & tips", included: true },
       { name: "Social media content calendar", included: true },
@@ -231,7 +231,7 @@ export default function Pricing() {
             { icon: Users, title: "Customer CRM", desc: "Track leads, follow-ups, and never lose a customer" },
             { icon: Calendar, title: "Smart Bookings", desc: "Manage appointments with queue predictions" },
             { icon: Wallet, title: "Budget Tracker", desc: "Monitor income, expenses & get AI savings tips" },
-            { icon: BookOpen, title: "Bookkeeping", desc: "Track inventory, manage stock & get restock alerts" },
+            { icon: BookOpen, title: "Inventory", desc: "Track inventory, manage stock & get restock alerts" },
             { icon: MessageSquare, title: "WhatsApp Tools", desc: "Pre-built templates for customer engagement" },
           ].map((feature, index) => (
             <Card

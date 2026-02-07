@@ -159,7 +159,7 @@ const aiRestockSuggestions = [
   },
 ];
 
-export default function Bookkeeping() {
+export default function Inventory() {
   const [inventory] = useState<InventoryItem[]>(mockInventory);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState("all");
@@ -225,10 +225,10 @@ export default function Bookkeeping() {
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-              <BookOpen className="h-5 w-5 text-primary" />
+              <Package className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold">Bookkeeping</h1>
+              <h1 className="text-3xl font-bold">Inventory</h1>
               <p className="text-muted-foreground">
                 Track inventory, manage stock levels & get AI restock alerts.
               </p>
