@@ -1,18 +1,28 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Zap, CheckCircle2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const perks = [
   "Free Starter plan — ₦0 forever",
   "No credit card required",
-  "Full access to all 5 modules",
+  "Full access to all modules",
 ];
 
 export function CTASection() {
+  const { ref, isVisible } = useScrollReveal({ threshold: 0.2 });
+
   return (
     <section className="py-24 px-4">
       <div className="max-w-4xl mx-auto">
-        <div className="relative glass-strong rounded-3xl p-8 sm:p-12 text-center overflow-hidden">
+        <div
+          ref={ref}
+          className={cn(
+            "relative glass-strong rounded-3xl p-8 sm:p-12 text-center overflow-hidden scroll-reveal-scale",
+            isVisible && "revealed"
+          )}
+        >
           {/* Background glow */}
           <div className="absolute inset-0 gradient-glow opacity-50" />
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
