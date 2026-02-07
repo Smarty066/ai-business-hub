@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Zap, Menu, X } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -45,6 +46,7 @@ export function Navbar() {
 
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-3">
+          <ThemeToggle />
           <Button variant="ghost" size="sm" asChild>
             <Link to="/dashboard">Log In</Link>
           </Button>
@@ -88,7 +90,8 @@ export function Navbar() {
             >
               Pricing
             </Link>
-            <div className="flex gap-3 pt-2">
+            <div className="flex items-center gap-3 pt-2">
+              <ThemeToggle />
               <Button variant="outline" size="sm" className="flex-1" asChild>
                 <Link to="/dashboard">Log In</Link>
               </Button>
