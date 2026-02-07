@@ -18,7 +18,7 @@ import {
   LayoutDashboard,
   Megaphone,
   Calendar,
-  CalendarRange,
+  
   Wallet,
   Users,
   BookOpen,
@@ -38,7 +38,7 @@ const mainItems = [
   { title: "Booking", url: "/booking", icon: Calendar },
   { title: "Budget", url: "/budget", icon: Wallet },
   { title: "Bookkeeping", url: "/bookkeeping", icon: BookOpen },
-  { title: "Content Calendar", url: "/content-calendar", icon: CalendarRange },
+  
   { title: "Pricing", url: "/pricing", icon: CreditCard },
 ];
 
