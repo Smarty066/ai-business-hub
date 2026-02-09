@@ -27,6 +27,8 @@ import {
   Zap,
   ChevronLeft,
   ChevronRight,
+  ArrowLeftRight,
+  Calculator,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -38,7 +40,8 @@ const mainItems = [
   { title: "Booking", url: "/booking", icon: Calendar },
   { title: "Budget", url: "/budget", icon: Wallet },
   { title: "Inventory", url: "/inventory", icon: Package },
-  
+  { title: "Converter", url: "/converter", icon: ArrowLeftRight },
+  { title: "Calculator", url: "/calculator", icon: Calculator },
   { title: "Pricing", url: "/pricing", icon: CreditCard },
 ];
 
