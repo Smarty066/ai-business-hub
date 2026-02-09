@@ -30,6 +30,8 @@ import {
   Pie,
   Cell,
 } from "recharts";
+import { useCurrency } from "@/hooks/useCurrency";
+import { CurrencySelector } from "@/components/CurrencySelector";
 
 const monthlyData = [
   { month: "Jan", income: 8500, expenses: 6200 },
@@ -79,11 +81,12 @@ const aiInsights = [
   {
     type: "tip",
     title: "Savings Opportunity",
-    message: "Based on your spending patterns, you could save $400/month by consolidating your software subscriptions.",
+    message: "Based on your spending patterns, you could save 400/month by consolidating your software subscriptions.",
   },
 ];
 
 export default function Budget() {
+  const { symbol, formatAmount, formatCompact } = useCurrency();
   const [formData, setFormData] = useState({
     description: "",
     amount: "",
@@ -106,13 +109,16 @@ export default function Budget() {
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 rounded-xl bg-warning/10 flex items-center justify-center">
-            <Wallet className="h-5 w-5 text-warning" />
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-warning/10 flex items-center justify-center">
+              <Wallet className="h-5 w-5 text-warning" />
+            </div>
+            <h1 className="text-3xl font-bold">Budget & Finance</h1>
           </div>
-          <h1 className="text-3xl font-bold">Budget & Finance</h1>
+          <CurrencySelector />
         </div>
-        <p className="text-muted-foreground">
+        <p className="text-muted-foreground mt-2">
           Track expenses, analyze spending patterns, and get AI-powered insights.
         </p>
       </div>
@@ -125,7 +131,7 @@ export default function Budget() {
               <TrendingUp className="h-5 w-5 text-success" />
               <Badge className="bg-success/10 text-success">+12%</Badge>
             </div>
-            <p className="text-2xl font-bold">${(totalIncome / 1000).toFixed(1)}K</p>
+            <p className="text-2xl font-bold">{formatCompact(totalIncome)}</p>
             <p className="text-sm text-muted-foreground">Total Income (6mo)</p>
           </CardContent>
         </Card>
@@ -136,7 +142,7 @@ export default function Budget() {
               <TrendingDown className="h-5 w-5 text-destructive" />
               <Badge className="bg-destructive/10 text-destructive">-8%</Badge>
             </div>
-            <p className="text-2xl font-bold">${(totalExpenses / 1000).toFixed(1)}K</p>
+            <p className="text-2xl font-bold">{formatCompact(totalExpenses)}</p>
             <p className="text-sm text-muted-foreground">Total Expenses (6mo)</p>
           </CardContent>
         </Card>
@@ -147,7 +153,7 @@ export default function Budget() {
               <DollarSign className="h-5 w-5 text-primary" />
               <Badge className="bg-primary/10 text-primary">+18%</Badge>
             </div>
-            <p className="text-2xl font-bold">${(netSavings / 1000).toFixed(1)}K</p>
+            <p className="text-2xl font-bold">{formatCompact(netSavings)}</p>
             <p className="text-sm text-muted-foreground">Net Savings</p>
           </CardContent>
         </Card>
@@ -186,6 +192,7 @@ export default function Budget() {
                         border: "1px solid hsl(var(--border))",
                         borderRadius: "8px",
                       }}
+                      formatter={(value: number) => formatAmount(value)}
                     />
                     <Line
                       type="monotone"
@@ -244,7 +251,7 @@ export default function Budget() {
                         transaction.type === "income" ? "text-success" : "text-destructive"
                       }`}
                     >
-                      {transaction.type === "income" ? "+" : ""}${Math.abs(transaction.amount).toLocaleString()}
+                      {transaction.type === "income" ? "+" : ""}{formatAmount(Math.abs(transaction.amount))}
                     </p>
                   </div>
                 ))}
@@ -289,9 +296,11 @@ export default function Budget() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="amount">Amount</Label>
+                  <Label htmlFor="amount">Amount ({symbol})</Label>
                   <div className="relative">
-                    <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground font-medium">
+                      {symbol}
+                    </span>
                     <Input
                       id="amount"
                       type="number"
@@ -358,6 +367,7 @@ export default function Budget() {
                         border: "1px solid hsl(var(--border))",
                         borderRadius: "8px",
                       }}
+                      formatter={(value: number) => formatAmount(value)}
                     />
                   </RePieChart>
                 </ResponsiveContainer>
@@ -372,7 +382,7 @@ export default function Budget() {
                       />
                       <span>{category.name}</span>
                     </div>
-                    <span className="text-muted-foreground">${category.value.toLocaleString()}</span>
+                    <span className="text-muted-foreground">{formatAmount(category.value)}</span>
                   </div>
                 ))}
               </div>

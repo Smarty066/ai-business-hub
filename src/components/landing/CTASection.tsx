@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const perks = [
-  "Free Starter plan — ₦0 forever",
+  "Free Starter plan — $0 forever",
   "No credit card required",
   "Full access to all modules",
 ];
