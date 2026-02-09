@@ -1,4 +1,3 @@
-import { useState, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,190 +18,54 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { toast } from "sonner";
-import { format, isSameDay, startOfDay } from "date-fns";
-import { z } from "zod";
-
-interface Booking {
-  id: string;
-  name: string;
-  email: string;
-  phone?: string;
-  service: string;
-  date: Date;
-  time: string;
-  status: "pending" | "confirmed" | "completed" | "cancelled";
-  queuePosition: number;
-  estimatedWait: number;
-}
-
-const initialBookings: Booking[] = [
-  {
-    id: "1",
-    name: "John Smith",
-    email: "john@example.com",
-    service: "Initial Consultation",
-    date: new Date(),
-    time: "10:00 AM",
-    status: "confirmed",
-    queuePosition: 1,
-    estimatedWait: 0,
-  },
-  {
-    id: "2",
-    name: "Sarah Johnson",
-    email: "sarah@example.com",
-    service: "Strategy Session",
-    date: new Date(),
-    time: "11:30 AM",
-    status: "pending",
-    queuePosition: 2,
-    estimatedWait: 15,
-  },
-  {
-    id: "3",
-    name: "Mike Brown",
-    email: "mike@example.com",
-    service: "Review Meeting",
-    date: new Date(),
-    time: "2:00 PM",
-    status: "pending",
-    queuePosition: 3,
-    estimatedWait: 45,
-  },
-];
-
-const services = [
-  { value: "consultation", label: "Initial Consultation", duration: "30 min" },
-  { value: "strategy", label: "Strategy Session", duration: "60 min" },
-  { value: "review", label: "Review Meeting", duration: "45 min" },
-  { value: "workshop", label: "Workshop", duration: "120 min" },
-];
-
-const serviceLabels: Record<string, string> = Object.fromEntries(
-  services.map((s) => [s.value, s.label])
-);
-
-const morningSlots = [
-  "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
-];
-
-const afternoonSlots = [
-  "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", "4:00 PM",
-];
-
-const bookingSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(2, "Name must be at least 2 characters")
-    .max(100, "Name must be less than 100 characters"),
-  email: z
-    .string()
-    .trim()
-    .email("Please enter a valid email address")
-    .max(255, "Email must be less than 255 characters"),
-  phone: z
-    .string()
-    .trim()
-    .refine(
-      (val) => val === "" || /^(\+234|0)[0-9]{10}$/.test(val.replace(/\s/g, "")),
-      "Enter a valid Nigerian number (e.g. +2348012345678 or 08012345678)"
-    )
-    .optional()
-    .or(z.literal("")),
-  service: z.string().min(1, "Please select a service"),
-  time: z.string().min(1, "Please select a time slot"),
-});
-
-type FormErrors = Partial<Record<keyof z.infer<typeof bookingSchema>, string>>;
-
-const emptyForm = { name: "", email: "", phone: "", service: "", time: "" };
+import { format, startOfDay } from "date-fns";
+import {
+  useBooking,
+  services,
+  morningSlots,
+  afternoonSlots,
+} from "@/hooks/useBooking";
 
 export default function Booking() {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
-  const [bookings, setBookings] = useState<Booking[]>(initialBookings);
-  const [formData, setFormData] = useState(emptyForm);
-  const [errors, setErrors] = useState<FormErrors>({});
-
-  // Compute queue stats from live data
-  const activeBookings = useMemo(
-    () => bookings.filter((b) => b.status !== "cancelled" && b.status !== "completed"),
-    [bookings]
-  );
-  const todayBookings = useMemo(
-    () => activeBookings.filter((b) => isSameDay(b.date, new Date())),
-    [activeBookings]
-  );
-  const avgWait = useMemo(() => {
-    const pending = todayBookings.filter((b) => b.status === "pending");
-    if (pending.length === 0) return 0;
-    return Math.round(pending.reduce((s, b) => s + b.estimatedWait, 0) / pending.length);
-  }, [todayBookings]);
+  const {
+    selectedDate,
+    setSelectedDate,
+    formData,
+    errors,
+    activeBookings,
+    todayBookings,
+    avgWait,
+    updateField,
+    validateForm,
+    addBooking,
+    cancelBooking,
+    rescheduleBooking,
+  } = useBooking(true);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    const result = bookingSchema.safeParse(formData);
-    if (!result.success) {
-      const fieldErrors: FormErrors = {};
-      result.error.errors.forEach((err) => {
-        const field = err.path[0] as keyof FormErrors;
-        if (!fieldErrors[field]) fieldErrors[field] = err.message;
-      });
-      setErrors(fieldErrors);
-      return;
-    }
+    const data = validateForm();
+    if (!data) return;
 
     if (!selectedDate) {
       toast.error("Please select a date");
       return;
     }
 
-    setErrors({});
-
-    const newBooking: Booking = {
-      id: crypto.randomUUID(),
-      name: result.data.name,
-      email: result.data.email,
-      phone: result.data.phone || undefined,
-      service: serviceLabels[result.data.service] || result.data.service,
-      date: selectedDate,
-      time: result.data.time,
-      status: "pending",
-      queuePosition: activeBookings.length + 1,
-      estimatedWait: activeBookings.length * 15,
-    };
-
-    setBookings((prev) => [...prev, newBooking]);
-    setFormData(emptyForm);
+    addBooking(data, selectedDate);
     toast.success(
-      `Booking confirmed for ${format(selectedDate, "MMM d")} at ${result.data.time}!`
+      `Booking confirmed for ${format(selectedDate, "MMM d")} at ${data.time}!`
     );
   };
 
   const handleCancel = (id: string) => {
-    setBookings((prev) =>
-      prev.map((b) => (b.id === id ? { ...b, status: "cancelled" as const } : b))
-    );
+    cancelBooking(id);
     toast.success("Booking cancelled");
   };
 
-  const handleReschedule = (booking: Booking) => {
-    // Pre-fill the form with the booking data and cancel the old one
-    setFormData({
-      name: booking.name,
-      email: booking.email,
-      phone: booking.phone || "",
-      service:
-        services.find((s) => s.label === booking.service)?.value || booking.service,
-      time: "",
-    });
-    setSelectedDate(new Date());
-    setBookings((prev) =>
-      prev.map((b) => (b.id === booking.id ? { ...b, status: "cancelled" as const } : b))
-    );
+  const handleReschedule = (booking: Parameters<typeof rescheduleBooking>[0]) => {
+    rescheduleBooking(booking);
     toast.info("Fill in a new time to reschedule");
-    // Scroll to top of form
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -218,14 +81,6 @@ export default function Booking() {
         return "bg-destructive/10 text-destructive";
       default:
         return "";
-    }
-  };
-
-  const updateField = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    // Clear error on change
-    if (errors[field as keyof FormErrors]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
   };
 

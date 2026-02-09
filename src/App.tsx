@@ -15,6 +15,7 @@ import Pricing from "./pages/Pricing";
 
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import PublicBooking from "./pages/PublicBooking";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/book" element={<PublicBooking />} />
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/marketing" element={<Marketing />} />
