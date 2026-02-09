@@ -16,10 +16,19 @@ export interface Booking {
 }
 
 export const services = [
-  { value: "consultation", label: "Initial Consultation", duration: "30 min" },
-  { value: "strategy", label: "Strategy Session", duration: "60 min" },
-  { value: "review", label: "Review Meeting", duration: "45 min" },
-  { value: "workshop", label: "Workshop", duration: "120 min" },
+  { value: "consultation", label: "Initial Consultation", duration: "30 min", category: "General" },
+  { value: "strategy", label: "Strategy Session", duration: "60 min", category: "General" },
+  { value: "review", label: "Review Meeting", duration: "45 min", category: "General" },
+  { value: "follow-up", label: "Follow-up Session", duration: "20 min", category: "General" },
+  { value: "product-demo", label: "Product Demo", duration: "30 min", category: "Sales" },
+  { value: "sales-pitch", label: "Sales Pitch Meeting", duration: "45 min", category: "Sales" },
+  { value: "branding", label: "Branding Consultation", duration: "60 min", category: "Marketing" },
+  { value: "social-media", label: "Social Media Setup", duration: "45 min", category: "Marketing" },
+  { value: "bookkeeping", label: "Bookkeeping Review", duration: "30 min", category: "Finance" },
+  { value: "tax-advisory", label: "Tax Advisory Session", duration: "60 min", category: "Finance" },
+  { value: "training", label: "Staff Training", duration: "90 min", category: "Operations" },
+  { value: "workshop", label: "Business Workshop", duration: "120 min", category: "Operations" },
+  { value: "custom", label: "Custom Service", duration: "60 min", category: "Other" },
 ];
 
 export const serviceLabels: Record<string, string> = Object.fromEntries(

@@ -13,7 +13,8 @@ import Budget from "./pages/Budget";
 import Customers from "./pages/Customers";
 import Inventory from "./pages/Inventory";
 import Pricing from "./pages/Pricing";
-
+import CurrencyConverter from "./pages/CurrencyConverter";
+import Calculator from "./pages/Calculator";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import PublicBooking from "./pages/PublicBooking";
@@ -38,6 +39,8 @@ const App = () => (
               <Route path="/customers" element={<Customers />} />
               <Route path="/inventory" element={<Inventory />} />
               <Route path="/pricing" element={<Pricing />} />
+              <Route path="/converter" element={<CurrencyConverter />} />
+              <Route path="/calculator" element={<Calculator />} />
               <Route path="/settings" element={<Settings />} />
             </Route>
             <Route path="*" element={<NotFound />} />
