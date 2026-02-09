@@ -9,12 +9,16 @@ import {
   User,
   Bell,
   Shield,
-  Palette,
   Zap,
+  Globe,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useCurrency } from "@/hooks/useCurrency";
+import { CurrencySelector } from "@/components/CurrencySelector";
 
 export default function Settings() {
+  const { currency } = useCurrency();
+
   const handleSave = () => {
     toast.success("Settings saved successfully!");
   };
@@ -58,6 +62,30 @@ export default function Settings() {
             <div className="space-y-2">
               <Label htmlFor="company">Company Name</Label>
               <Input id="company" defaultValue="Smith Enterprises" />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Regional / Currency */}
+        <Card className="glass-strong border-0">
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Globe className="h-5 w-5 text-primary" />
+              <CardTitle className="text-lg">Regional</CardTitle>
+            </div>
+            <CardDescription>Set your preferred currency for all modules</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-medium">Currency</p>
+                <p className="text-sm text-muted-foreground">
+                  {currency === "NGN"
+                    ? "Nigerian Naira (₦) — for businesses in Nigeria"
+                    : "US Dollar ($) — for international businesses"}
+                </p>
+              </div>
+              <CurrencySelector />
             </div>
           </CardContent>
         </Card>

@@ -21,13 +21,15 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import { useCurrency, PRICING } from "@/hooks/useCurrency";
+import { CurrencySelector } from "@/components/CurrencySelector";
 
-const plans = [
+const getPlans = (symbol: string, monthly: number, annual: number) => [
   {
     id: "free",
     name: "Starter",
     description: "Perfect for getting started with your business",
-    price: "₦0",
+    price: `${symbol}0`,
     period: "Forever free",
     icon: Zap,
     highlight: false,
@@ -51,8 +53,8 @@ const plans = [
     id: "premium",
     name: "Growth",
     description: "Everything you need to scale your business",
-    price: "₦2,500",
-    period: "/month",
+    monthlyPrice: monthly,
+    annualPrice: annual,
     icon: Crown,
     highlight: true,
     cta: "Upgrade to Growth",
@@ -98,7 +100,7 @@ const faqs = [
   },
   {
     q: "What payment methods do you accept?",
-    a: "We accept bank transfers, card payments, and mobile money across all Nigerian banks.",
+    a: "We accept bank transfers, card payments, and mobile money across all Nigerian banks. International cards are also supported.",
   },
   {
     q: "Will I lose my data if I downgrade?",
@@ -106,12 +108,15 @@ const faqs = [
   },
   {
     q: "Is there a yearly discount?",
-    a: "Yes! Pay annually and get 2 months free — just ₦25,000/year instead of ₦30,000.",
+    a: "Yes! Pay annually and get 2 months free.",
   },
 ];
 
 export default function Pricing() {
   const [annual, setAnnual] = useState(false);
+  const { currency, symbol, formatAmount } = useCurrency();
+  const pricing = PRICING[currency];
+  const plans = getPlans(symbol, pricing.monthly, pricing.annual);
 
   const handleSubscribe = (planId: string) => {
     if (planId === "free") {
@@ -134,14 +139,17 @@ export default function Pricing() {
           your business in one powerful suite.
         </p>
 
-        {/* Annual toggle */}
-        <div className="flex items-center justify-center gap-3 mt-6">
-          <Label className="text-sm text-muted-foreground">Monthly</Label>
-          <Switch checked={annual} onCheckedChange={setAnnual} />
-          <Label className="text-sm text-muted-foreground">
-            Annually
-            <Badge className="ml-2 bg-success/10 text-success text-xs">Save 17%</Badge>
-          </Label>
+        {/* Currency + Annual toggle */}
+        <div className="flex flex-col items-center gap-4 mt-6">
+          <CurrencySelector />
+          <div className="flex items-center gap-3">
+            <Label className="text-sm text-muted-foreground">Monthly</Label>
+            <Switch checked={annual} onCheckedChange={setAnnual} />
+            <Label className="text-sm text-muted-foreground">
+              Annually
+              <Badge className="ml-2 bg-success/10 text-success text-xs">Save 17%</Badge>
+            </Label>
+          </div>
         </div>
       </div>
 
@@ -181,10 +189,14 @@ export default function Pricing() {
               <CardDescription>{plan.description}</CardDescription>
               <div className="mt-4">
                 <span className="text-4xl font-bold">
-                  {plan.id === "premium" && annual ? "₦25,000" : plan.price}
+                  {plan.id === "premium"
+                    ? formatAmount(annual ? (plan as any).annualPrice : (plan as any).monthlyPrice)
+                    : plan.price}
                 </span>
                 <span className="text-muted-foreground ml-1">
-                  {plan.id === "premium" && annual ? "/year" : plan.period}
+                  {plan.id === "premium"
+                    ? annual ? "/year" : "/month"
+                    : plan.period}
                 </span>
               </div>
             </CardHeader>
@@ -313,7 +325,7 @@ export default function Pricing() {
         <CardContent className="p-8 text-center">
           <h3 className="text-2xl font-bold mb-2">Ready to grow your business?</h3>
           <p className="text-muted-foreground mb-6">
-            Join thousands of Nigerian businesses already using Smart AI to scale smarter.
+            Join thousands of businesses already using Smart AI to scale smarter.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button variant="hero" size="lg" onClick={() => handleSubscribe("premium")}>

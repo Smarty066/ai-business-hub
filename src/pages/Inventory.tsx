@@ -29,6 +29,8 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useCurrency } from "@/hooks/useCurrency";
+import { CurrencySelector } from "@/components/CurrencySelector";
 
 interface InventoryItem {
   id: string;
@@ -139,7 +141,7 @@ const aiRestockSuggestions = [
   {
     item: "Screen Protectors",
     urgency: "critical",
-    reason: "Out of stock for 3 weeks. You've been losing an estimated ₦14,000/week in sales.",
+    reason: "Out of stock for 3 weeks. You've been losing estimated sales revenue weekly.",
     suggestedQty: 100,
     estimatedCost: 30000,
   },
@@ -160,6 +162,7 @@ const aiRestockSuggestions = [
 ];
 
 export default function Inventory() {
+  const { symbol, formatAmount, formatCompact } = useCurrency();
   const [inventory] = useState<InventoryItem[]>(mockInventory);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState("all");
@@ -234,10 +237,13 @@ export default function Inventory() {
               </p>
             </div>
           </div>
-          <Button variant="hero" onClick={() => setShowAddForm(!showAddForm)}>
-            <Plus className="h-4 w-4 mr-2" />
-            Add Item
-          </Button>
+          <div className="flex items-center gap-3">
+            <CurrencySelector size="sm" />
+            <Button variant="hero" onClick={() => setShowAddForm(!showAddForm)}>
+              <Plus className="h-4 w-4 mr-2" />
+              Add Item
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -249,7 +255,7 @@ export default function Inventory() {
               <Package className="h-5 w-5 text-primary" />
               <Badge className="bg-primary/10 text-primary">{inventory.length}</Badge>
             </div>
-            <p className="text-2xl font-bold">₦{(totalStockValue / 1000).toFixed(0)}K</p>
+            <p className="text-2xl font-bold">{formatCompact(totalStockValue)}</p>
             <p className="text-sm text-muted-foreground">Stock Value (Cost)</p>
           </CardContent>
         </Card>
@@ -258,9 +264,9 @@ export default function Inventory() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-2">
               <ShoppingCart className="h-5 w-5 text-success" />
-              <Badge className="bg-success/10 text-success">+₦{(potentialProfit / 1000).toFixed(0)}K</Badge>
+              <Badge className="bg-success/10 text-success">+{formatCompact(potentialProfit)}</Badge>
             </div>
-            <p className="text-2xl font-bold">₦{(totalRetailValue / 1000).toFixed(0)}K</p>
+            <p className="text-2xl font-bold">{formatCompact(totalRetailValue)}</p>
             <p className="text-sm text-muted-foreground">Retail Value</p>
           </CardContent>
         </Card>
@@ -271,7 +277,7 @@ export default function Inventory() {
               <BarChart3 className="h-5 w-5 text-warning" />
               <Badge className="bg-warning/10 text-warning">{((potentialProfit / totalStockValue) * 100).toFixed(0)}%</Badge>
             </div>
-            <p className="text-2xl font-bold">₦{(potentialProfit / 1000).toFixed(0)}K</p>
+            <p className="text-2xl font-bold">{formatCompact(potentialProfit)}</p>
             <p className="text-sm text-muted-foreground">Potential Profit</p>
           </CardContent>
         </Card>
@@ -333,7 +339,7 @@ export default function Inventory() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Cost Price (₦)</Label>
+                    <Label>Cost Price ({symbol})</Label>
                     <Input
                       type="number"
                       placeholder="0"
@@ -342,7 +348,7 @@ export default function Inventory() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Selling Price (₦)</Label>
+                    <Label>Selling Price ({symbol})</Label>
                     <Input
                       type="number"
                       placeholder="0"
@@ -441,8 +447,8 @@ export default function Inventory() {
                             <Progress value={stockPercent} className="h-1.5 w-16" />
                           </div>
                         </TableCell>
-                        <TableCell className="text-sm">₦{item.costPrice.toLocaleString()}</TableCell>
-                        <TableCell className="text-sm">₦{item.sellingPrice.toLocaleString()}</TableCell>
+                        <TableCell className="text-sm">{formatAmount(item.costPrice)}</TableCell>
+                        <TableCell className="text-sm">{formatAmount(item.sellingPrice)}</TableCell>
                         <TableCell>
                           <Badge className="bg-success/10 text-success">{margin}%</Badge>
                         </TableCell>
@@ -485,7 +491,7 @@ export default function Inventory() {
                     <p className={`font-semibold text-sm ${
                       record.type === "sale" ? "text-success" : "text-primary"
                     }`}>
-                      {record.type === "sale" ? "+" : "-"}₦{Math.abs(record.amount).toLocaleString()}
+                      {record.type === "sale" ? "+" : "-"}{formatAmount(Math.abs(record.amount))}
                     </p>
                   </div>
                 ))}
@@ -526,7 +532,7 @@ export default function Inventory() {
                   <p className="text-xs text-muted-foreground mb-3">{suggestion.reason}</p>
                   <div className="flex items-center justify-between text-xs">
                     <span>Suggested: <strong>{suggestion.suggestedQty} units</strong></span>
-                    <span className="text-muted-foreground">~₦{suggestion.estimatedCost.toLocaleString()}</span>
+                    <span className="text-muted-foreground">~{formatAmount(suggestion.estimatedCost)}</span>
                   </div>
                   <Button variant="outline" size="sm" className="w-full mt-3" onClick={() => toast.success(`Restock order for ${suggestion.item} noted!`)}>
                     <ShoppingCart className="h-3 w-3 mr-2" />
@@ -549,7 +555,7 @@ export default function Inventory() {
               <div className="p-3 rounded-lg bg-success/10">
                 <p className="font-medium text-sm mb-1">Top Seller This Week</p>
                 <p className="text-xs text-muted-foreground">
-                  Bluetooth Earbuds — 23 units sold, ₦138,000 revenue. Consider increasing stock.
+                  Bluetooth Earbuds — 23 units sold, {formatAmount(138000)} revenue. Consider increasing stock.
                 </p>
               </div>
               <div className="p-3 rounded-lg bg-warning/10">
@@ -561,7 +567,7 @@ export default function Inventory() {
               <div className="p-3 rounded-lg bg-primary/10">
                 <p className="font-medium text-sm mb-1">Profit Tip</p>
                 <p className="text-xs text-muted-foreground">
-                  Your average margin is 47%. Products above ₦5,000 sell slower but generate 2x more profit per unit.
+                  Your average margin is 47%. Products above {formatAmount(5000)} sell slower but generate 2x more profit per unit.
                 </p>
               </div>
             </CardContent>

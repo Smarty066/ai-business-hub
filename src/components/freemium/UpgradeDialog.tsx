@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Crown, ArrowRight, Sparkles, Zap, CheckCircle2 } from "lucide-react";
+import { useCurrency, PRICING } from "@/hooks/useCurrency";
 
 interface UpgradeDialogProps {
   open: boolean;
@@ -24,6 +25,9 @@ const perks = [
 ];
 
 export function UpgradeDialog({ open, onOpenChange }: UpgradeDialogProps) {
+  const { currency, formatAmount } = useCurrency();
+  const pricing = PRICING[currency];
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md glass-strong border-border text-center">
@@ -51,11 +55,11 @@ export function UpgradeDialog({ open, onOpenChange }: UpgradeDialogProps) {
 
         <div className="glass rounded-xl p-4 mb-2">
           <div className="flex items-baseline justify-center gap-1">
-            <span className="text-3xl font-bold">₦2,500</span>
+            <span className="text-3xl font-bold">{formatAmount(pricing.monthly)}</span>
             <span className="text-muted-foreground text-sm">/month</span>
           </div>
           <p className="text-xs text-muted-foreground mt-1">
-            or ₦25,000/year (save 17%)
+            or {formatAmount(pricing.annual)}/year (save 17%)
           </p>
         </div>
 
