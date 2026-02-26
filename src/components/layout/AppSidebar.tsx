@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import {
   Sidebar,
   SidebarContent,
@@ -29,9 +28,15 @@ import {
   ChevronRight,
   ArrowLeftRight,
   Calculator,
+  StickyNote,
+  FileText,
+  Gift,
+  LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "sonner";
 
 const mainItems = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
@@ -40,8 +45,11 @@ const mainItems = [
   { title: "Booking", url: "/booking", icon: Calendar },
   { title: "Budget", url: "/budget", icon: Wallet },
   { title: "Inventory", url: "/inventory", icon: Package },
+  { title: "Sales Report", url: "/sales-report", icon: FileText },
+  { title: "Notes", url: "/notes", icon: StickyNote },
   { title: "Converter", url: "/converter", icon: ArrowLeftRight },
   { title: "Calculator", url: "/calculator", icon: Calculator },
+  { title: "Affiliate", url: "/affiliate", icon: Gift },
   { title: "Pricing", url: "/pricing", icon: CreditCard },
 ];
 
@@ -53,8 +61,16 @@ export function AppSidebar() {
   const { state, toggleSidebar } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
+  const navigate = useNavigate();
+  const { signOut, profile } = useAuth();
 
   const isActive = (path: string) => location.pathname === path;
+
+  const handleLogout = async () => {
+    await signOut();
+    toast.success("Logged out successfully");
+    navigate("/login");
+  };
 
   return (
     <Sidebar
@@ -70,7 +86,14 @@ export function AppSidebar() {
             <Zap className="h-5 w-5 text-primary-foreground" />
           </div>
           {!collapsed && (
-            <span className="text-lg font-bold text-gradient">Smart AI</span>
+            <div className="flex flex-col">
+              <span className="text-lg font-bold text-gradient">OjaLink</span>
+              {profile?.business_name && (
+                <span className="text-xs text-muted-foreground truncate max-w-[140px]">
+                  {profile.business_name}
+                </span>
+              )}
+            </div>
           )}
         </Link>
       </SidebarHeader>
@@ -148,6 +171,15 @@ export function AppSidebar() {
           )}
           <ThemeToggle />
         </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleLogout}
+          className="w-full justify-start gap-3 text-destructive hover:text-destructive hover:bg-destructive/10"
+        >
+          <LogOut className={cn("h-4 w-4", collapsed && "mx-auto")} />
+          {!collapsed && <span>Log Out</span>}
+        </Button>
         <Button
           variant="ghost"
           size="sm"

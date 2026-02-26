@@ -75,8 +75,8 @@ export function HeroSection() {
           style={{ animationDelay: "0.3s" }}
         >
           <Button variant="hero" size="xl" asChild>
-            <Link to="/dashboard">
-              Get Started Free
+            <Link to="/register">
+              Register
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>

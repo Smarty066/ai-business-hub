@@ -28,7 +28,7 @@ export function Navbar() {
           <div className="flex h-9 w-9 items-center justify-center rounded-xl gradient-primary glow-sm">
             <Zap className="h-5 w-5 text-primary-foreground" />
           </div>
-          <span className="text-lg font-bold text-gradient">Smart AI Suite</span>
+          <span className="text-lg font-bold text-gradient">OjaLink</span>
         </Link>
 
         {/* Desktop Links */}
@@ -48,10 +48,10 @@ export function Navbar() {
         <div className="hidden md:flex items-center gap-3">
           <ThemeToggle />
           <Button variant="ghost" size="sm" asChild>
-            <Link to="/dashboard">Log In</Link>
+            <Link to="/login">Log In</Link>
           </Button>
           <Button variant="hero" size="sm" asChild>
-            <Link to="/dashboard">Start Free →</Link>
+            <Link to="/register">Register</Link>
           </Button>
         </div>
 
@@ -93,10 +93,10 @@ export function Navbar() {
             <div className="flex items-center gap-3 pt-2">
               <ThemeToggle />
               <Button variant="outline" size="sm" className="flex-1" asChild>
-                <Link to="/dashboard">Log In</Link>
+                <Link to="/login">Log In</Link>
               </Button>
               <Button variant="hero" size="sm" className="flex-1" asChild>
-                <Link to="/dashboard">Start Free</Link>
+                <Link to="/register">Register</Link>
               </Button>
             </div>
           </div>

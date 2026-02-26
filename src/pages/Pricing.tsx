@@ -33,7 +33,7 @@ const getPlans = (symbol: string, monthly: number, annual: number) => [
     period: "Forever free",
     icon: Zap,
     highlight: false,
-    cta: "Get Started Free",
+    cta: "Register Free",
     features: [
       { name: "5 AI content generations/month", included: true },
       { name: "3 WhatsApp templates/month", included: true },
@@ -325,7 +325,7 @@ export default function Pricing() {
         <CardContent className="p-8 text-center">
           <h3 className="text-2xl font-bold mb-2">Ready to grow your business?</h3>
           <p className="text-muted-foreground mb-6">
-            Join thousands of businesses already using Smart AI to scale smarter.
+            Join thousands of businesses already using OjaLink to scale smarter.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button variant="hero" size="lg" onClick={() => handleSubscribe("premium")}>

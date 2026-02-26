@@ -53,8 +53,8 @@ export function CTASection() {
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button variant="hero" size="xl" asChild>
-                <Link to="/dashboard">
-                  Start Free Trial
+                <Link to="/register">
+                  Register Now
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
