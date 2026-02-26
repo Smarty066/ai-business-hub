@@ -11,7 +11,9 @@ import {
   ArrowRight,
   Sparkles,
   Package,
+  StickyNote,
 } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 const stats = [
   { label: "Content Generated", value: "247", change: "+12%", icon: FileText },
@@ -64,11 +66,15 @@ const quickActions = [
 ];
 
 export default function Dashboard() {
+  const { profile } = useAuth();
+
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Welcome back!</h1>
+        <h1 className="text-3xl font-bold mb-2">
+          {profile?.business_name ? `Welcome, ${profile.business_name}!` : "Welcome to OjaLink!"}
+        </h1>
         <p className="text-muted-foreground">Here's an overview of your productivity suite.</p>
       </div>
 

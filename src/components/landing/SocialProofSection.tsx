@@ -14,7 +14,7 @@ const testimonials = [
   {
     name: "Adaeze Okafor",
     role: "Founder, Ada's Kitchen",
-    text: "I used to spend 3 hours every day on social media and invoicing. Smart AI Suite cut that to 30 minutes. My revenue is up 40% since I started using it.",
+    text: "I used to spend 3 hours every day on social media and invoicing. OjaLink cut that to 30 minutes. My revenue is up 40% since I started using it.",
     rating: 5,
   },
   {

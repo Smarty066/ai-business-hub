@@ -26,7 +26,7 @@ export function Footer() {
               <div className="flex h-9 w-9 items-center justify-center rounded-xl gradient-primary">
                 <Zap className="h-5 w-5 text-primary-foreground" />
               </div>
-              <span className="text-lg font-bold text-gradient">Smart AI Suite</span>
+              <span className="text-lg font-bold text-gradient">OjaLink</span>
             </div>
             <p className="text-sm text-muted-foreground max-w-sm leading-relaxed">
               The all-in-one AI productivity suite built for Nigerian entrepreneurs and growing businesses.
@@ -70,7 +70,7 @@ export function Footer() {
 
         <div className="border-t border-border pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Smart AI Suite. All rights reserved.
+            © {new Date().getFullYear()} OjaLink. All rights reserved.
           </p>
           <p className="text-xs text-muted-foreground/60">
             Built with ❤️ for Nigerian businesses
