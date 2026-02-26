@@ -31,7 +31,37 @@ serve(async (req) => {
 
     if (!roleData) throw new Error("Admin access required");
 
-    const { topic, generate_image } = await req.json();
+    const body = await req.json();
+    const topic = body.topic;
+    const generate_image = body.generate_image;
+
+    // Input validation
+    if (topic !== undefined && topic !== null) {
+      if (typeof topic !== "string" || topic.length > 500) {
+        return new Response(JSON.stringify({ error: "Invalid topic. Must be a string under 500 characters." }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+    if (generate_image !== undefined && typeof generate_image !== "boolean") {
+      return new Response(JSON.stringify({ error: "Invalid generate_image parameter." }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Rate limiting: max 10 generations per hour per user
+    const { data: recentCalls } = await supabase
+      .from("activity_log")
+      .select("created_at")
+      .eq("user_id", user.id)
+      .eq("action", "generate_affiliate_content")
+      .gte("created_at", new Date(Date.now() - 3600000).toISOString());
+
+    if (recentCalls && recentCalls.length >= 10) {
+      return new Response(JSON.stringify({ error: "Rate limit exceeded. Max 10 generations per hour." }), {
+        status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
