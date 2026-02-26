@@ -7,20 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import {
-  Users,
-  Copy,
-  Share2,
-  Wallet,
-  TrendingUp,
-  Gift,
+  Users, Copy, Share2, Wallet, TrendingUp, Gift, Phone,
 } from "lucide-react";
 import { toast } from "sonner";
 import { AffiliateContentFeed } from "@/components/affiliate/AffiliateContentFeed";
@@ -29,6 +19,8 @@ interface Referral {
   id: string;
   referral_code: string;
   referred_id: string | null;
+  referred_name: string;
+  referred_phone: string;
   signup_earned: number;
   subscription_earned: number;
   total_earned: number;
@@ -51,8 +43,6 @@ export default function Affiliate() {
 
   useEffect(() => {
     if (!user) return;
-
-    // Generate referral code from user ID
     const code = user.id.slice(0, 8).toUpperCase();
     setReferralCode(code);
 
@@ -217,7 +207,7 @@ export default function Affiliate() {
       <Card className="glass-strong border-0">
         <CardHeader>
           <CardTitle className="text-lg">Your Referrals</CardTitle>
-          <CardDescription>Track all your referral signups and earnings</CardDescription>
+          <CardDescription>Track all your referral signups and earnings. Call them to encourage subscription!</CardDescription>
         </CardHeader>
         <CardContent>
           {referrals.length === 0 ? (
@@ -226,24 +216,38 @@ export default function Affiliate() {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Phone</TableHead>
                   <TableHead>Date</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead>Signup Earned</TableHead>
-                  <TableHead>Sub Earned</TableHead>
-                  <TableHead>Total</TableHead>
+                  <TableHead>Earned</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {referrals.map((r) => (
                   <TableRow key={r.id}>
-                    <TableCell className="text-sm">{new Date(r.created_at).toLocaleDateString()}</TableCell>
+                    <TableCell className="font-medium text-sm">
+                      {r.referred_name || "—"}
+                    </TableCell>
+                    <TableCell>
+                      {r.referred_phone ? (
+                        <a
+                          href={`tel:${r.referred_phone}`}
+                          className="flex items-center gap-1 text-sm text-primary hover:underline"
+                        >
+                          <Phone className="h-3 w-3" />
+                          {r.referred_phone}
+                        </a>
+                      ) : "—"}
+                    </TableCell>
+                    <TableCell className="text-sm text-muted-foreground">
+                      {new Date(r.created_at).toLocaleDateString()}
+                    </TableCell>
                     <TableCell>
                       <Badge className={r.status === "confirmed" ? "bg-success/10 text-success" : "bg-warning/10 text-warning"}>
                         {r.status}
                       </Badge>
                     </TableCell>
-                    <TableCell>{formatAmount(Number(r.signup_earned))}</TableCell>
-                    <TableCell>{formatAmount(Number(r.subscription_earned))}</TableCell>
                     <TableCell className="font-medium">{formatAmount(Number(r.total_earned))}</TableCell>
                   </TableRow>
                 ))}

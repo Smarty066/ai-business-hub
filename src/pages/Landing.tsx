@@ -79,7 +79,7 @@ function HeroSection() {
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4 mb-8 animate-fade-in" style={{ animationDelay: "0.25s" }}>
-          {["No credit card required", "Set up in 2 minutes", "Cancel anytime"].map((b) => (
+          {["No credit card required", "Set up in 2 minutes", "7-day free trial"].map((b) => (
             <div key={b} className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <CheckCircle2 className="h-3.5 w-3.5 text-success" />
               <span>{b}</span>
@@ -395,7 +395,7 @@ function ContactSection() {
 
 /* ─── FAQ ─── */
 const faqs = [
-  { q: "Is OjaLink really free?", a: "Yes! Our Starter plan is completely free forever. You get access to all core features including bookings, customer tracking, inventory, sales reports, and notes. Premium features are available on paid plans." },
+  { q: "Is OjaLink really free?", a: "Yes! You get a 7-day free trial with full access to all features. After the trial, you can subscribe to our Growth plan to continue using premium features. Free features like Converter, Notes, Calculator, and Affiliate remain available." },
   { q: "Do I need any technical knowledge?", a: "Not at all. OjaLink is designed for everyday business owners. If you can use WhatsApp, you can use OjaLink. Setup takes less than 2 minutes." },
   { q: "How does the affiliate program work?", a: "Share your unique referral link. You earn ₦1,000 ($0.50) when someone signs up and ₦250 ($0.25) for each month they stay subscribed. You can withdraw earnings or use them to pay for your own subscription." },
   { q: "Can my customers book appointments directly?", a: "Yes! OjaLink creates a public booking page for your business. Share the link on WhatsApp, Instagram, or your website — customers book directly and you manage everything from your dashboard." },
@@ -464,7 +464,7 @@ function CTASection() {
               Join 2,400+ businesses saving 15+ hours every week with OjaLink.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
-              {["Free Starter plan — ₦0 forever", "No credit card required", "Full feature access"].map((p) => (
+              {["Free 7-day trial — full access", "No credit card required", "All features included"].map((p) => (
                 <div key={p} className="flex items-center gap-1.5 text-xs text-muted-foreground">
                   <CheckCircle2 className="h-3.5 w-3.5 text-success" />
                   <span>{p}</span>

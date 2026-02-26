@@ -5,19 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import {
-  Check,
-  X,
-  Zap,
-  Crown,
-  Sparkles,
-  ArrowRight,
-  Users,
-  Megaphone,
-  Calendar,
-  Wallet,
-  BookOpen,
-  MessageSquare,
-  Shield,
+  Check, X, Zap, Crown, Sparkles, ArrowRight, Users, Megaphone,
+  Calendar, Wallet, BookOpen, MessageSquare, Shield,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
@@ -30,18 +19,18 @@ const getPlans = (symbol: string, monthly: number, annual: number) => [
     name: "Starter",
     description: "Perfect for getting started with your business",
     price: `${symbol}0`,
-    period: "Forever free",
+    period: "7-day free trial",
     icon: Zap,
     highlight: false,
     cta: "Register Free",
     features: [
-      { name: "5 AI content generations/month", included: true },
-      { name: "3 WhatsApp templates/month", included: true },
-      { name: "Basic budget tracker", included: true },
-      { name: "Up to 20 customers", included: true },
-      { name: "5 bookings/month", included: true },
+      { name: "Full access for 7 days", included: true },
+      { name: "Currency Converter", included: true },
+      { name: "Quick Notes", included: true },
+      { name: "Business Calculator", included: true },
+      { name: "Affiliate Program", included: true },
+      { name: "5 AI generations/month", included: true },
       { name: "Basic inventory tracking", included: true },
-      { name: "Community support", included: true },
       { name: "Unlimited generations", included: false },
       { name: "Advanced AI insights", included: false },
       { name: "Restock alerts & forecasting", included: false },
@@ -95,16 +84,16 @@ const testimonials = [
 
 const faqs = [
   {
-    q: "Can I cancel anytime?",
-    a: "Yes! No lock-in contracts. Cancel your subscription anytime from Settings.",
+    q: "How does the subscription work?",
+    a: "Your subscription renews automatically every month. You get uninterrupted access to all Growth features without needing to manually renew.",
   },
   {
     q: "What payment methods do you accept?",
     a: "We accept bank transfers, card payments, and mobile money across all Nigerian banks. International cards are also supported.",
   },
   {
-    q: "Will I lose my data if I downgrade?",
-    a: "Your data is always safe. If you downgrade, you keep your existing data but new features will be limited.",
+    q: "Will I lose my data after trial?",
+    a: "Your data is always safe. After your 7-day free trial, you'll need to subscribe to Growth to continue accessing premium features. Free features (Converter, Notes, Calculator, Affiliate) remain available.",
   },
   {
     q: "Is there a yearly discount?",
@@ -122,7 +111,7 @@ export default function Pricing() {
     if (planId === "free") {
       toast.success("You're already on the free plan! Start exploring.");
     } else {
-      toast.success("Redirecting to payment... (Demo mode)");
+      toast.success("Payment coming soon! All features are currently available during your trial.");
     }
   };
 
@@ -135,8 +124,7 @@ export default function Pricing() {
           Grow your business, <span className="text-gradient">not your expenses</span>
         </h1>
         <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-          Start free. Upgrade when you're ready. Everything you need to run and grow
-          your business in one powerful suite.
+          Start with a 7-day free trial. Upgrade when you're ready. Everything you need to run and grow your business.
         </p>
 
         {/* Currency + Annual toggle */}
@@ -159,9 +147,7 @@ export default function Pricing() {
           <Card
             key={plan.id}
             className={`relative overflow-hidden animate-fade-in ${
-              plan.highlight
-                ? "glass-strong border-primary/50 glow"
-                : "glass-strong border-0"
+              plan.highlight ? "glass-strong border-primary/50 glow" : "glass-strong border-0"
             }`}
             style={{ animationDelay: `${index * 0.1}s` }}
           >
@@ -170,16 +156,12 @@ export default function Pricing() {
             )}
             <CardHeader className="pb-4">
               <div className="flex items-center gap-3 mb-2">
-                <div
-                  className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                    plan.highlight ? "gradient-primary" : "bg-secondary"
-                  }`}
-                >
-                  <plan.icon
-                    className={`h-6 w-6 ${
-                      plan.highlight ? "text-primary-foreground" : "text-muted-foreground"
-                    }`}
-                  />
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                  plan.highlight ? "gradient-primary" : "bg-secondary"
+                }`}>
+                  <plan.icon className={`h-6 w-6 ${
+                    plan.highlight ? "text-primary-foreground" : "text-muted-foreground"
+                  }`} />
                 </div>
                 {plan.highlight && (
                   <Badge className="bg-primary/10 text-primary">Most Popular</Badge>
@@ -217,11 +199,9 @@ export default function Pricing() {
                     ) : (
                       <X className="h-4 w-4 text-muted-foreground/40 mt-0.5 flex-shrink-0" />
                     )}
-                    <span
-                      className={`text-sm ${
-                        feature.included ? "text-foreground" : "text-muted-foreground/50"
-                      }`}
-                    >
+                    <span className={`text-sm ${
+                      feature.included ? "text-foreground" : "text-muted-foreground/50"
+                    }`}>
                       {feature.name}
                     </span>
                   </div>
@@ -246,11 +226,7 @@ export default function Pricing() {
             { icon: BookOpen, title: "Inventory", desc: "Track inventory, manage stock & get restock alerts" },
             { icon: MessageSquare, title: "WhatsApp Tools", desc: "Pre-built templates for customer engagement" },
           ].map((feature, index) => (
-            <Card
-              key={feature.title}
-              className="glass-strong border-0 animate-fade-in"
-              style={{ animationDelay: `${0.3 + index * 0.05}s` }}
-            >
+            <Card key={feature.title} className="glass-strong border-0 animate-fade-in" style={{ animationDelay: `${0.3 + index * 0.05}s` }}>
               <CardContent className="p-5 flex items-start gap-4">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
                   <feature.icon className="h-5 w-5 text-primary" />
@@ -272,11 +248,7 @@ export default function Pricing() {
         </h2>
         <div className="grid md:grid-cols-3 gap-4">
           {testimonials.map((t, index) => (
-            <Card
-              key={t.name}
-              className="glass-strong border-0 animate-fade-in"
-              style={{ animationDelay: `${0.4 + index * 0.1}s` }}
-            >
+            <Card key={t.name} className="glass-strong border-0 animate-fade-in" style={{ animationDelay: `${0.4 + index * 0.1}s` }}>
               <CardContent className="p-5">
                 <div className="flex items-center gap-1 mb-3">
                   {[...Array(5)].map((_, i) => (
@@ -301,11 +273,7 @@ export default function Pricing() {
         </h2>
         <div className="space-y-3">
           {faqs.map((faq, index) => (
-            <Card
-              key={index}
-              className="glass-strong border-0 animate-fade-in"
-              style={{ animationDelay: `${0.5 + index * 0.05}s` }}
-            >
+            <Card key={index} className="glass-strong border-0 animate-fade-in" style={{ animationDelay: `${0.5 + index * 0.05}s` }}>
               <CardContent className="p-5">
                 <div className="flex items-start gap-3">
                   <Shield className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
@@ -333,9 +301,7 @@ export default function Pricing() {
               Start Growth Plan
             </Button>
             <Button variant="outline" size="lg" asChild>
-              <Link to="/dashboard">
-                Try Free First
-              </Link>
+              <Link to="/dashboard">Try Free First</Link>
             </Button>
           </div>
         </CardContent>

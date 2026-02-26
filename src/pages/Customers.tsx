@@ -6,6 +6,10 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
+import { format, isSameDay, parseISO } from "date-fns";
 import {
   Dialog,
   DialogContent,
@@ -15,18 +19,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-  Users,
-  UserPlus,
-  Search,
-  Phone,
-  Mail,
-  MessageCircle,
-  Clock,
-  Star,
-  MoreVertical,
-  Calendar,
-  TrendingUp,
-  AlertCircle,
+  Users, UserPlus, Search, Phone, Mail, MessageCircle,
+  Clock, Star, MoreVertical, Calendar as CalendarIcon,
+  TrendingUp, AlertCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -118,14 +113,12 @@ export default function Customers() {
   const [customers, setCustomers] = useState<Customer[]>(initialCustomers);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [dateFilter, setDateFilter] = useState<Date | undefined>(undefined);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [newCustomer, setNewCustomer] = useState({
-    name: "",
-    phone: "",
-    email: "",
+    name: "", phone: "", email: "",
     channel: "whatsapp" as Customer["channel"],
-    notes: "",
-    tags: "",
+    notes: "", tags: "",
   });
 
   const filteredCustomers = customers.filter((c) => {
@@ -134,7 +127,8 @@ export default function Customers() {
       c.phone.includes(searchQuery) ||
       c.email.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = filterStatus === "all" || c.status === filterStatus;
-    return matchesSearch && matchesStatus;
+    const matchesDate = !dateFilter || isSameDay(parseISO(c.lastContact), dateFilter);
+    return matchesSearch && matchesStatus && matchesDate;
   });
 
   const stats = {
@@ -258,6 +252,22 @@ export default function Customers() {
             <SelectItem value="inactive">Inactive</SelectItem>
           </SelectContent>
         </Select>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline" className={cn("w-[160px] justify-start text-left font-normal", !dateFilter && "text-muted-foreground")}>
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {dateFilter ? format(dateFilter, "MMM d, yyyy") : "Filter date"}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar mode="single" selected={dateFilter} onSelect={setDateFilter} className={cn("p-3 pointer-events-auto")} />
+          </PopoverContent>
+        </Popover>
+        {dateFilter && (
+          <Button variant="ghost" size="sm" onClick={() => setDateFilter(undefined)} className="text-xs">
+            Clear
+          </Button>
+        )}
         <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
           <DialogTrigger asChild>
             <Button variant="hero">
@@ -410,7 +420,7 @@ export default function Customers() {
                           </span>
                           {customer.nextFollowUp && (
                             <span className="flex items-center gap-1">
-                              <Calendar className="h-3 w-3" />
+                              <CalendarIcon className="h-3 w-3" />
                               Next: {customer.nextFollowUp}
                             </span>
                           )}
