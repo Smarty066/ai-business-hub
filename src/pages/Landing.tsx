@@ -14,6 +14,7 @@ import { useEffect, useRef, useState } from "react";
 /* ─── Navbar ─── */
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", h);
@@ -40,15 +41,52 @@ function Navbar() {
           <a href="#contact" className="text-muted-foreground hover:text-foreground transition-colors">Contact</a>
           <Link to="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">Pricing</Link>
         </div>
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="sm" asChild>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">
             <Link to="/login">Log in</Link>
           </Button>
-          <Button variant="hero" size="sm" asChild>
+          <Button variant="hero" size="sm" asChild className="hidden sm:inline-flex">
             <Link to="/register">Get Started Free</Link>
           </Button>
+          {/* Mobile hamburger */}
+          <button
+            className="md:hidden p-2 text-foreground"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle menu"
+          >
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              {mobileOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
         </div>
       </div>
+      {/* Mobile menu */}
+      {mobileOpen && (
+        <div className="md:hidden glass border-t border-border mt-2 px-4 py-4 space-y-3 animate-fade-in">
+          {[
+            { href: "#features", label: "Features" },
+            { href: "#about", label: "About Us" },
+            { href: "#testimonials", label: "Testimonials" },
+            { href: "#faq", label: "FAQ" },
+            { href: "#contact", label: "Contact" },
+          ].map((item) => (
+            <a key={item.href} href={item.href} className="block text-sm text-muted-foreground hover:text-foreground" onClick={() => setMobileOpen(false)}>{item.label}</a>
+          ))}
+          <Link to="/pricing" className="block text-sm text-muted-foreground hover:text-foreground" onClick={() => setMobileOpen(false)}>Pricing</Link>
+          <div className="flex gap-2 pt-2 border-t border-border">
+            <Button variant="ghost" size="sm" asChild className="flex-1">
+              <Link to="/login">Log in</Link>
+            </Button>
+            <Button variant="hero" size="sm" asChild className="flex-1">
+              <Link to="/register">Get Started</Link>
+            </Button>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
