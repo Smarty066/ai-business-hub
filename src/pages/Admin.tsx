@@ -123,7 +123,7 @@ export default function Admin() {
   }
 
   return (
-    <div className="p-6 lg:p-8 max-w-7xl mx-auto">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
       <div className="mb-8">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-destructive/10 flex items-center justify-center">
@@ -271,6 +271,7 @@ export default function Admin() {
               <CardTitle className="text-lg">Registered Users ({users.length})</CardTitle>
             </CardHeader>
             <CardContent>
+              <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -293,6 +294,7 @@ export default function Admin() {
                   ))}
                 </TableBody>
               </Table>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
@@ -304,6 +306,7 @@ export default function Admin() {
               <CardTitle className="text-lg">Recent Activity</CardTitle>
             </CardHeader>
             <CardContent>
+              <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -332,6 +335,7 @@ export default function Admin() {
                   ))}
                 </TableBody>
               </Table>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

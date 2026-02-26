@@ -97,7 +97,7 @@ export default function Affiliate() {
   };
 
   return (
-    <div className="p-6 lg:p-8 max-w-7xl mx-auto">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
       <div className="mb-8">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
@@ -130,7 +130,7 @@ export default function Affiliate() {
       </Card>
 
       {/* Stats */}
-      <div className="grid sm:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6">
         <Card className="glass-strong border-0">
           <CardContent className="p-5">
             <Users className="h-5 w-5 text-primary mb-2" />
@@ -162,12 +162,12 @@ export default function Affiliate() {
       </div>
 
       {/* Actions */}
-      <div className="flex gap-3 mb-6">
-        <Button variant="hero" onClick={handleWithdraw}>
+      <div className="flex flex-col sm:flex-row gap-3 mb-6">
+        <Button variant="hero" onClick={handleWithdraw} className="w-full sm:w-auto">
           <Wallet className="h-4 w-4 mr-2" />
           Withdraw (min {formatAmount(minWithdraw)})
         </Button>
-        <Button variant="outline" onClick={handleUseForSubscription}>
+        <Button variant="outline" onClick={handleUseForSubscription} className="w-full sm:w-auto text-xs sm:text-sm">
           Use Balance for Subscription ({formatAmount(subCost)})
         </Button>
       </div>
@@ -213,6 +213,7 @@ export default function Affiliate() {
           {referrals.length === 0 ? (
             <p className="text-center text-muted-foreground py-8">No referrals yet. Share your link to start earning!</p>
           ) : (
+            <div className="overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -253,6 +254,7 @@ export default function Affiliate() {
                 ))}
               </TableBody>
             </Table>
+            </div>
           )}
         </CardContent>
       </Card>

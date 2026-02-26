@@ -116,7 +116,7 @@ export default function Pricing() {
   };
 
   return (
-    <div className="p-6 lg:p-8 max-w-7xl mx-auto">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
       {/* Header */}
       <div className="text-center mb-12">
         <Badge className="bg-primary/10 text-primary mb-4">Simple Pricing</Badge>
