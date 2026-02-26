@@ -2,7 +2,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import {
-  Megaphone,
   Calendar,
   Wallet,
   TrendingUp,
@@ -23,14 +22,6 @@ const stats = [
 ];
 
 const quickActions = [
-  {
-    title: "Generate Marketing Content",
-    description: "Create ads, emails, WhatsApp & social posts",
-    icon: Megaphone,
-    href: "/marketing",
-    color: "text-primary",
-    bgColor: "bg-primary/10",
-  },
   {
     title: "Customer Follow-Up",
     description: "Track leads and never miss a follow-up",
