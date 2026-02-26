@@ -22,7 +22,6 @@ serve(async (req) => {
     const { data: { user }, error: authError } = await supabase.auth.getUser(token);
     if (authError || !user) throw new Error("Unauthorized");
 
-    // Check admin role
     const { data: roleData } = await supabase
       .from("user_roles")
       .select("role")
@@ -32,11 +31,12 @@ serve(async (req) => {
 
     if (!roleData) throw new Error("Admin access required");
 
-    const { topic, image_url } = await req.json();
+    const { topic, generate_image } = await req.json();
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
+    // Generate content text
     const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -53,12 +53,14 @@ serve(async (req) => {
 - Persuasive and benefit-focused
 - Include emojis naturally
 - Ready to paste on WhatsApp, Instagram, Twitter, or Facebook
+- ALWAYS mention "OjaLink" by name at least 2-3 times in the body
+- Highlight key OjaLink features: booking management, customer CRM, inventory tracking, sales reports, budget planning, affiliate earnings
 - Include a call-to-action mentioning the referral link
 
 Return a JSON object with exactly these fields:
 {
-  "title": "A catchy title for the content piece",
-  "body": "The full marketing copy ready to paste"
+  "title": "A catchy title for the content piece (must include OjaLink)",
+  "body": "The full marketing copy ready to paste (must mention OjaLink multiple times)"
 }
 
 Only return valid JSON, nothing else.`
@@ -88,7 +90,6 @@ Only return valid JSON, nothing else.`
     const aiData = await aiResponse.json();
     const rawContent = aiData.choices?.[0]?.message?.content || "";
     
-    // Parse the JSON response
     let parsed;
     try {
       const jsonMatch = rawContent.match(/\{[\s\S]*\}/);
@@ -97,13 +98,80 @@ Only return valid JSON, nothing else.`
       parsed = { title: "OjaLink Affiliate Promo", body: rawContent };
     }
 
+    // Generate image if requested
+    let imageUrl: string | null = null;
+    if (generate_image) {
+      try {
+        const imageResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${LOVABLE_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "google/gemini-3-pro-image-preview",
+            messages: [
+              {
+                role: "user",
+                content: `Create a professional, eye-catching promotional image for OjaLink - a Nigerian business management app. The image should:
+- Feature the text "OjaLink" prominently
+- Include key points from this content: ${parsed.title}
+- Use modern, professional design with vibrant colors (green, gold accents on dark or white background)
+- Be suitable for social media (WhatsApp, Instagram, Facebook)
+- Include icons or visuals representing business tools (charts, calendar, money)
+- Look like a professional marketing banner, NOT AI-generated art
+- Add a tagline: "Run Your Business From One Dashboard"`
+              }
+            ],
+          }),
+        });
+
+        if (imageResponse.ok) {
+          const imageData = await imageResponse.json();
+          const imageContent = imageData.choices?.[0]?.message?.content;
+          // Check if the response contains an image (base64 in parts)
+          if (imageData.choices?.[0]?.message?.parts) {
+            for (const part of imageData.choices[0].message.parts) {
+              if (part.inline_data) {
+                // Upload base64 image to Supabase storage
+                const base64Data = part.inline_data.data;
+                const mimeType = part.inline_data.mime_type || "image/png";
+                const ext = mimeType.includes("jpeg") ? "jpg" : "png";
+                const fileName = `affiliate-content/${crypto.randomUUID()}.${ext}`;
+                
+                const binaryData = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
+                
+                // Ensure bucket exists
+                await supabase.storage.createBucket("affiliate-images", { public: true }).catch(() => {});
+                
+                const { error: uploadError } = await supabase.storage
+                  .from("affiliate-images")
+                  .upload(fileName, binaryData, { contentType: mimeType });
+                
+                if (!uploadError) {
+                  const { data: urlData } = supabase.storage
+                    .from("affiliate-images")
+                    .getPublicUrl(fileName);
+                  imageUrl = urlData.publicUrl;
+                }
+                break;
+              }
+            }
+          }
+        }
+      } catch (imgErr) {
+        console.error("Image generation error:", imgErr);
+        // Continue without image - don't fail the whole request
+      }
+    }
+
     // Save to database
     const { data: saved, error: saveError } = await supabase
       .from("affiliate_content")
       .insert({
         title: parsed.title,
         body: parsed.body,
-        image_url: image_url || null,
+        image_url: imageUrl,
         created_by: user.id,
       })
       .select()
@@ -116,7 +184,7 @@ Only return valid JSON, nothing else.`
       user_id: user.id,
       user_email: user.email,
       action: "generate_affiliate_content",
-      details: `Generated: ${parsed.title}`,
+      details: `Generated: ${parsed.title}${generate_image ? " (with image)" : ""}`,
     });
 
     return new Response(JSON.stringify(saved), {
