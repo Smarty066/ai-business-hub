@@ -5,7 +5,7 @@ import {
   ArrowRight, CheckCircle2, Sparkles, Zap, Calendar, Users, Wallet,
   Package, FileText, Gift, StickyNote, ArrowLeftRight, Calculator,
   Star, Quote, Shield, ChevronDown, CreditCard, BarChart3, Clock,
-  TrendingUp, MessageCircle,
+  TrendingUp, MessageCircle, Mail, Phone,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
@@ -34,9 +34,10 @@ function Navbar() {
         </Link>
         <div className="hidden md:flex items-center gap-6 text-sm">
           <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">Features</a>
-          <a href="#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors">How It Works</a>
+          <a href="#about" className="text-muted-foreground hover:text-foreground transition-colors">About Us</a>
           <a href="#testimonials" className="text-muted-foreground hover:text-foreground transition-colors">Testimonials</a>
           <a href="#faq" className="text-muted-foreground hover:text-foreground transition-colors">FAQ</a>
+          <a href="#contact" className="text-muted-foreground hover:text-foreground transition-colors">Contact</a>
           <Link to="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">Pricing</Link>
         </div>
         <div className="flex items-center gap-3">
@@ -302,21 +303,77 @@ function AboutSection() {
       <div className="max-w-4xl mx-auto">
         <div ref={ref} className={cn("scroll-reveal", isVisible && "revealed")}>
           <div className="glass-strong rounded-2xl p-8 sm:p-10">
-            <p className="text-xs font-medium text-primary uppercase tracking-wider mb-2">About OjaLink</p>
+            <p className="text-xs font-medium text-primary uppercase tracking-wider mb-2">About Us</p>
             <h2 className="text-2xl sm:text-3xl font-bold mb-4">
-              Built <span className="text-gradient">by Nigerians, for Nigerians.</span>
+              What is <span className="text-gradient">OjaLink?</span>
             </h2>
             <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
               <p>
-                OjaLink was born from a simple frustration: Nigerian business owners were spending more time on admin work than actually growing their businesses. Between WhatsApp booking chaos, manual record-keeping, and scattered customer data, entrepreneurs were losing hours every day.
+                <strong className="text-foreground">OjaLink</strong> is an all-in-one business management platform purpose-built for Nigerian entrepreneurs, small business owners, and hustlers who want to stop juggling multiple apps and start running everything from one clean dashboard.
               </p>
               <p>
-                We built OjaLink to change that. Our platform combines booking management, customer CRM, inventory tracking, sales reports, budget planning, and an affiliate program — all in one clean dashboard designed for the Nigerian market.
+                Whether you sell food, run a salon, manage a logistics company, or handle any kind of business — OjaLink brings your <strong className="text-foreground">bookings, customer management, inventory tracking, sales reports, budget planning, notes, and affiliate earnings</strong> into one simple platform. No stress, no wahala.
               </p>
               <p>
-                Whether you're running a restaurant in Lagos, a beauty salon in Abuja, or a logistics company in Port Harcourt, OjaLink gives you the tools to work smarter, not harder. And with our generous free tier, there's no reason not to start today.
+                We built OjaLink because Nigerian business owners deserve tools that actually work for them. Instead of spending hours on WhatsApp coordinating bookings, scribbling sales in notebooks, or losing track of inventory — OjaLink automates and organizes everything so you can focus on what matters: <strong className="text-foreground">growing your business</strong>.
+              </p>
+              <p>
+                With OjaLink, you can let customers book appointments from your public link, track every sale and generate branded PDF reports, manage your inventory with restock alerts, keep your finances crystal clear with income/expense tracking, and even earn money by referring other business owners through our affiliate program.
+              </p>
+              <p>
+                OjaLink is <strong className="text-foreground">free to start</strong>, takes less than 2 minutes to set up, and works on any device. Whether you're in Lagos, Abuja, Port Harcourt, or anywhere in Nigeria — OjaLink is your business companion that never sleeps.
               </p>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Contact Us ─── */
+function ContactSection() {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section id="contact" className="py-16 px-4">
+      <div className="max-w-4xl mx-auto">
+        <div ref={ref} className={cn("scroll-reveal", isVisible && "revealed")}>
+          <div className="text-center mb-8">
+            <p className="text-xs font-medium text-primary uppercase tracking-wider mb-2">Get In Touch</p>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-3">
+              Contact <span className="text-gradient">Us</span>
+            </h2>
+            <p className="text-muted-foreground max-w-lg mx-auto">
+              Have questions, feedback, or need help? We're always here for you.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-4 max-w-xl mx-auto">
+            <a
+              href="mailto:faruqabiola629@gmail.com"
+              className="glass-strong rounded-2xl p-6 text-center hover:scale-[1.02] hover:glow-sm transition-all group"
+            >
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                <Mail className="h-6 w-6 text-primary" />
+              </div>
+              <h3 className="font-semibold text-sm mb-1">Email Us</h3>
+              <p className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">
+                faruqabiola629@gmail.com
+              </p>
+            </a>
+            <a
+              href="https://wa.me/2349071926462"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="glass-strong rounded-2xl p-6 text-center hover:scale-[1.02] hover:glow-sm transition-all group"
+            >
+              <div className="w-12 h-12 rounded-xl bg-success/10 flex items-center justify-center mx-auto mb-3">
+                <MessageCircle className="h-6 w-6 text-success" />
+              </div>
+              <h3 className="font-semibold text-sm mb-1">WhatsApp</h3>
+              <p className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">
+                09071926462
+              </p>
+            </a>
           </div>
         </div>
       </div>
@@ -491,6 +548,7 @@ export default function Landing() {
       <AboutSection />
       <SocialProofSection />
       <FAQSection />
+      <ContactSection />
       <CTASection />
       <Footer />
     </div>

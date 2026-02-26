@@ -52,7 +52,7 @@ export default function Admin() {
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [generating, setGenerating] = useState(false);
   const [topic, setTopic] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [generateImage, setGenerateImage] = useState(true);
   const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export default function Admin() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${session.access_token}`,
           },
-          body: JSON.stringify({ topic, image_url: imageUrl || null }),
+          body: JSON.stringify({ topic, generate_image: generateImage }),
         }
       );
 
@@ -95,7 +95,7 @@ export default function Admin() {
 
       toast.success("Affiliate content generated!");
       setTopic("");
-      setImageUrl("");
+      setGenerateImage(true);
       fetchAll();
     } catch (e: any) {
       toast.error(e.message);
@@ -195,16 +195,18 @@ export default function Admin() {
                   onChange={(e) => setTopic(e.target.value)}
                 />
               </div>
-              <div className="space-y-2">
-                <Label className="flex items-center gap-2">
-                  <Image className="h-4 w-4" />
-                  Image URL (optional)
-                </Label>
-                <Input
-                  placeholder="https://example.com/promo-image.jpg"
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
+              <div className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  id="generate-image"
+                  checked={generateImage}
+                  onChange={(e) => setGenerateImage(e.target.checked)}
+                  className="rounded border-border"
                 />
+                <Label htmlFor="generate-image" className="flex items-center gap-2 cursor-pointer">
+                  <Image className="h-4 w-4" />
+                  Auto-generate promotional image with OjaLink branding
+                </Label>
               </div>
               <Button variant="hero" onClick={handleGenerate} disabled={generating}>
                 {generating ? (
