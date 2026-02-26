@@ -23,6 +23,7 @@ import {
   Gift,
 } from "lucide-react";
 import { toast } from "sonner";
+import { AffiliateContentFeed } from "@/components/affiliate/AffiliateContentFeed";
 
 interface Referral {
   id: string;
@@ -179,6 +180,11 @@ export default function Affiliate() {
         <Button variant="outline" onClick={handleUseForSubscription}>
           Use Balance for Subscription ({formatAmount(subCost)})
         </Button>
+      </div>
+
+      {/* Ready-to-Share Content */}
+      <div className="mb-6">
+        <AffiliateContentFeed referralLink={referralLink} />
       </div>
 
       {/* How it works */}

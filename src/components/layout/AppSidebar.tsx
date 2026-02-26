@@ -16,7 +16,6 @@ import { NavLink } from "@/components/NavLink";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   LayoutDashboard,
-  Megaphone,
   Calendar,
   Package,
   Wallet,
@@ -32,15 +31,16 @@ import {
   FileText,
   Gift,
   LogOut,
+  Shield,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
+import { useAdmin } from "@/hooks/useAdmin";
 import { toast } from "sonner";
 
 const mainItems = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-  { title: "Marketing", url: "/marketing", icon: Megaphone },
   { title: "Customers", url: "/customers", icon: Users },
   { title: "Booking", url: "/booking", icon: Calendar },
   { title: "Budget", url: "/budget", icon: Wallet },
@@ -63,6 +63,7 @@ export function AppSidebar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { signOut, profile } = useAuth();
+  const { isAdmin } = useAdmin();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -127,6 +128,26 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              {isAdmin && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={isActive("/admin")}
+                    tooltip={collapsed ? "Admin" : undefined}
+                    className={cn(
+                      "w-full justify-start gap-3 rounded-lg px-3 py-2.5 transition-all duration-200",
+                      isActive("/admin")
+                        ? "bg-destructive/10 text-destructive"
+                        : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                    )}
+                  >
+                    <NavLink to="/admin" end>
+                      <Shield className={cn("h-5 w-5", collapsed && "mx-auto")} />
+                      {!collapsed && <span>Admin Panel</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

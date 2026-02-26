@@ -9,7 +9,7 @@ import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { ProtectedRoute } from "@/components/layout/ProtectedRoute";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
-import Marketing from "./pages/Marketing";
+// Marketing removed
 import Booking from "./pages/Booking";
 import Budget from "./pages/Budget";
 import Customers from "./pages/Customers";
@@ -27,6 +27,7 @@ import ResetPassword from "./pages/ResetPassword";
 import Notes from "./pages/Notes";
 import SalesReport from "./pages/SalesReport";
 import Affiliate from "./pages/Affiliate";
+import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
@@ -53,7 +54,7 @@ const App = () => (
                 }
               >
                 <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/marketing" element={<Marketing />} />
+                {/* Marketing route removed */}
                 <Route path="/booking" element={<Booking />} />
                 <Route path="/budget" element={<Budget />} />
                 <Route path="/customers" element={<Customers />} />
@@ -65,6 +66,7 @@ const App = () => (
                 <Route path="/notes" element={<Notes />} />
                 <Route path="/sales-report" element={<SalesReport />} />
                 <Route path="/affiliate" element={<Affiliate />} />
+                <Route path="/admin" element={<Admin />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>

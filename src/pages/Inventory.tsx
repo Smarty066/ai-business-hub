@@ -426,6 +426,7 @@ export default function Inventory() {
                     <TableHead>Cost</TableHead>
                     <TableHead>Price</TableHead>
                     <TableHead>Margin</TableHead>
+                    <TableHead>Last Restocked</TableHead>
                     <TableHead>Status</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -452,6 +453,7 @@ export default function Inventory() {
                         <TableCell>
                           <Badge className="bg-success/10 text-success">{margin}%</Badge>
                         </TableCell>
+                        <TableCell className="text-sm text-muted-foreground">{item.lastRestocked}</TableCell>
                         <TableCell>{getStatusBadge(item.status)}</TableCell>
                       </TableRow>
                     );
