@@ -9,6 +9,7 @@ interface Profile {
   business_name: string;
   phone: string;
   avatar_url: string | null;
+  created_at: string;
 }
 
 interface AuthContextType {

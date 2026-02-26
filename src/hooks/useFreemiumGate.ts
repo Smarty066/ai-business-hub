@@ -1,7 +1,9 @@
 import { useState, useCallback, useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 const STORAGE_KEY = "freemium_usage";
 const FREE_LIMIT = 5;
+const TRIAL_DAYS = 7;
 
 // Testing mode: set to true to give everyone paid access
 const TESTING_MODE = true;
@@ -40,6 +42,7 @@ function saveUsageData(data: UsageData) {
 }
 
 export function useFreemiumGate() {
+  const { profile } = useAuth();
   const [usage, setUsage] = useState<UsageData>(getUsageData);
   const [showUpgrade, setShowUpgrade] = useState(false);
 
@@ -49,12 +52,25 @@ export function useFreemiumGate() {
     return () => window.removeEventListener("focus", sync);
   }, []);
 
-  // In testing mode, everyone has full access
-  const remaining = TESTING_MODE ? FREE_LIMIT : Math.max(0, FREE_LIMIT - usage.count);
-  const isLimitReached = TESTING_MODE ? false : usage.count >= FREE_LIMIT;
+  // Trial calculation based on profile creation date
+  const registeredAt = profile?.created_at ? new Date(profile.created_at) : null;
+  const trialEndsAt = registeredAt
+    ? new Date(registeredAt.getTime() + TRIAL_DAYS * 24 * 60 * 60 * 1000)
+    : null;
+  const isTrialActive = trialEndsAt ? new Date() < trialEndsAt : true;
+  const isTrialExpired = !isTrialActive;
+  const trialDaysLeft = trialEndsAt
+    ? Math.max(0, Math.ceil((trialEndsAt.getTime() - Date.now()) / (24 * 60 * 60 * 1000)))
+    : TRIAL_DAYS;
+
+  // Full access: testing mode OR active trial
+  const hasFullAccess = TESTING_MODE || isTrialActive;
+
+  const remaining = hasFullAccess ? FREE_LIMIT : Math.max(0, FREE_LIMIT - usage.count);
+  const isLimitReached = hasFullAccess ? false : usage.count >= FREE_LIMIT;
 
   const tryConsume = useCallback((): boolean => {
-    if (TESTING_MODE) return true;
+    if (hasFullAccess) return true;
     const current = getUsageData();
     if (current.count >= FREE_LIMIT) {
       setShowUpgrade(true);
@@ -64,7 +80,7 @@ export function useFreemiumGate() {
     saveUsageData(updated);
     setUsage(updated);
     return true;
-  }, []);
+  }, [hasFullAccess]);
 
   const closeUpgrade = useCallback(() => setShowUpgrade(false), []);
   const openUpgrade = useCallback(() => setShowUpgrade(true), []);
@@ -80,5 +96,10 @@ export function useFreemiumGate() {
     tryConsume,
     isFreeFeature: (feature: string) => FREE_FEATURES.includes(feature),
     isTestingMode: TESTING_MODE,
+    isTrialActive,
+    isTrialExpired,
+    trialDaysLeft,
+    trialEndsAt,
+    hasFullAccess,
   };
 }

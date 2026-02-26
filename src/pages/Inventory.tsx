@@ -4,6 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -15,18 +19,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  BookOpen,
-  Package,
-  AlertTriangle,
-  TrendingUp,
-  Plus,
-  Search,
-  ArrowUpRight,
-  ArrowDownRight,
-  Sparkles,
-  ShoppingCart,
-  BarChart3,
-  RefreshCw,
+  BookOpen, Package, AlertTriangle, TrendingUp, Plus, Search,
+  ArrowUpRight, ArrowDownRight, Sparkles, ShoppingCart, BarChart3,
+  RefreshCw, CalendarIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCurrency } from "@/hooks/useCurrency";
@@ -166,15 +161,11 @@ export default function Inventory() {
   const [inventory] = useState<InventoryItem[]>(mockInventory);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState("all");
+  const [dateFilter, setDateFilter] = useState<Date | undefined>(undefined);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newItem, setNewItem] = useState({
-    name: "",
-    category: "",
-    quantity: "",
-    costPrice: "",
-    sellingPrice: "",
-    reorderLevel: "",
-    supplier: "",
+    name: "", category: "", quantity: "", costPrice: "",
+    sellingPrice: "", reorderLevel: "", supplier: "",
   });
 
   const filteredInventory = inventory.filter((item) => {
@@ -394,7 +385,7 @@ export default function Inventory() {
                   <CardTitle className="text-lg">Inventory</CardTitle>
                   <CardDescription>Track all your products and stock levels</CardDescription>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -414,6 +405,22 @@ export default function Inventory() {
                       <SelectItem value="Accessories">Accessories</SelectItem>
                     </SelectContent>
                   </Select>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" className={cn("w-[160px] justify-start text-left font-normal", !dateFilter && "text-muted-foreground")}>
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {dateFilter ? format(dateFilter, "MMM d, yyyy") : "Filter by date"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar mode="single" selected={dateFilter} onSelect={setDateFilter} className={cn("p-3 pointer-events-auto")} />
+                    </PopoverContent>
+                  </Popover>
+                  {dateFilter && (
+                    <Button variant="ghost" size="sm" onClick={() => setDateFilter(undefined)} className="text-xs">
+                      Clear date
+                    </Button>
+                  )}
                 </div>
               </div>
             </CardHeader>

@@ -48,19 +48,20 @@ serve(async (req) => {
         messages: [
           {
             role: "system",
-            content: `You are a marketing copywriter for OjaLink, a Nigerian business productivity app. Generate affiliate marketing content that affiliates can copy and paste to promote OjaLink. The content should be:
-- Written in conversational Nigerian English (can include pidgin phrases)
-- Persuasive and benefit-focused
+            content: `You are a marketing copywriter for OjaLink, a Nigerian business productivity app. Generate affiliate marketing content that affiliates can copy and paste to promote OjaLink. The content should:
+- Be written in conversational Nigerian English (can include pidgin phrases)
+- Be persuasive and benefit-focused
 - Include emojis naturally
-- Ready to paste on WhatsApp, Instagram, Twitter, or Facebook
-- ALWAYS mention "OjaLink" by name at least 2-3 times in the body
-- Highlight key OjaLink features: booking management, customer CRM, inventory tracking, sales reports, budget planning, affiliate earnings
+- Be ready to paste on WhatsApp, Instagram, Twitter, or Facebook
+- ALWAYS mention "OjaLink" by name at least 2-3 times
+- Highlight key features: booking management, customer CRM, inventory tracking, sales reports, budget planning, affiliate earnings
 - Include a call-to-action mentioning the referral link
+- Include 3-5 KEY SELLING POINTS as bullet points
 
 Return a JSON object with exactly these fields:
 {
-  "title": "A catchy title for the content piece (must include OjaLink)",
-  "body": "The full marketing copy ready to paste (must mention OjaLink multiple times)"
+  "title": "A catchy title (must include OjaLink)",
+  "body": "The full marketing copy ready to paste (must mention OjaLink multiple times with key selling points)"
 }
 
 Only return valid JSON, nothing else.`
@@ -98,7 +99,7 @@ Only return valid JSON, nothing else.`
       parsed = { title: "OjaLink Affiliate Promo", body: rawContent };
     }
 
-    // Generate image if requested
+    // Generate promotional flier image if requested
     let imageUrl: string | null = null;
     if (generate_image) {
       try {
@@ -109,59 +110,64 @@ Only return valid JSON, nothing else.`
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            model: "google/gemini-3-pro-image-preview",
+            model: "google/gemini-2.5-flash-image",
             messages: [
               {
                 role: "user",
-                content: `Create a professional, eye-catching promotional image for OjaLink - a Nigerian business management app. The image should:
-- Feature the text "OjaLink" prominently
-- Include key points from this content: ${parsed.title}
-- Use modern, professional design with vibrant colors (green, gold accents on dark or white background)
-- Be suitable for social media (WhatsApp, Instagram, Facebook)
-- Include icons or visuals representing business tools (charts, calendar, money)
-- Look like a professional marketing banner, NOT AI-generated art
-- Add a tagline: "Run Your Business From One Dashboard"`
+                content: `Create a professional promotional flier image for OjaLink - a Nigerian business management app. The flier should:
+- Feature the text "OjaLink" prominently at the top
+- Include these key points from the content: ${parsed.title}
+- Key selling points to highlight on the flier:
+  • Manage bookings, customers & inventory
+  • AI-powered sales reports & insights
+  • Earn money with affiliate program
+  • Free 7-day trial
+- Use modern, professional design with vibrant green and gold accents
+- Be suitable for WhatsApp status and social media
+- Include tagline: "Run Your Business From One Dashboard"
+- Make it look like a real marketing banner, clean and professional
+- Add "Sign up FREE at ojalink.com" at the bottom`
               }
             ],
+            modalities: ["image", "text"],
           }),
         });
 
         if (imageResponse.ok) {
           const imageData = await imageResponse.json();
-          const imageContent = imageData.choices?.[0]?.message?.content;
-          // Check if the response contains an image (base64 in parts)
-          if (imageData.choices?.[0]?.message?.parts) {
-            for (const part of imageData.choices[0].message.parts) {
-              if (part.inline_data) {
-                // Upload base64 image to Supabase storage
-                const base64Data = part.inline_data.data;
-                const mimeType = part.inline_data.mime_type || "image/png";
-                const ext = mimeType.includes("jpeg") ? "jpg" : "png";
-                const fileName = `affiliate-content/${crypto.randomUUID()}.${ext}`;
-                
+          // Check for images in the response (Lovable AI format)
+          const images = imageData.choices?.[0]?.message?.images;
+          if (images && images.length > 0) {
+            const base64Url = images[0].image_url?.url;
+            if (base64Url && base64Url.startsWith("data:image")) {
+              // Extract base64 data
+              const matches = base64Url.match(/^data:image\/(\w+);base64,(.+)$/);
+              if (matches) {
+                const ext = matches[1] === "jpeg" ? "jpg" : matches[1];
+                const base64Data = matches[2];
+                const fileName = `affiliate-fliers/${crypto.randomUUID()}.${ext}`;
                 const binaryData = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
-                
+
                 // Ensure bucket exists
                 await supabase.storage.createBucket("affiliate-images", { public: true }).catch(() => {});
-                
+
                 const { error: uploadError } = await supabase.storage
                   .from("affiliate-images")
-                  .upload(fileName, binaryData, { contentType: mimeType });
-                
+                  .upload(fileName, binaryData, { contentType: `image/${matches[1]}` });
+
                 if (!uploadError) {
                   const { data: urlData } = supabase.storage
                     .from("affiliate-images")
                     .getPublicUrl(fileName);
                   imageUrl = urlData.publicUrl;
                 }
-                break;
               }
             }
           }
         }
       } catch (imgErr) {
         console.error("Image generation error:", imgErr);
-        // Continue without image - don't fail the whole request
+        // Continue without image
       }
     }
 
@@ -184,7 +190,7 @@ Only return valid JSON, nothing else.`
       user_id: user.id,
       user_email: user.email,
       action: "generate_affiliate_content",
-      details: `Generated: ${parsed.title}${generate_image ? " (with image)" : ""}`,
+      details: `Generated: ${parsed.title}${generate_image ? " (with flier image)" : ""}`,
     });
 
     return new Response(JSON.stringify(saved), {
