@@ -159,6 +159,58 @@ function FeatureCard({ feature, index }: { feature: typeof features[number]; ind
   );
 }
 
+function StepCard({ step, index }: { step: { step: string; title: string; desc: string; icon: React.ElementType }; index: number }) {
+  const { ref, isVisible } = useScrollReveal({ threshold: 0.1 });
+  return (
+    <div ref={ref} className={cn("scroll-reveal", isVisible && "revealed")} style={{ transitionDelay: `${index * 100}ms` }}>
+      <div className="glass-strong rounded-2xl p-6 text-center h-full">
+        <div className="w-12 h-12 rounded-full gradient-primary flex items-center justify-center mx-auto mb-4">
+          <span className="text-lg font-bold text-primary-foreground">{step.step}</span>
+        </div>
+        <h3 className="font-semibold mb-2">{step.title}</h3>
+        <p className="text-sm text-muted-foreground">{step.desc}</p>
+      </div>
+    </div>
+  );
+}
+
+function StatCard({ stat, index }: { stat: typeof stats[number]; index: number }) {
+  const { ref, isVisible } = useScrollReveal({ threshold: 0.2 });
+  return (
+    <div ref={ref} className={cn("scroll-reveal-scale", isVisible && "revealed")} style={{ transitionDelay: `${index * 80}ms` }}>
+      <div className="glass-strong rounded-2xl p-5 text-center hover:glow-sm transition-all">
+        <AnimatedCounter target={stat.value} suffix={stat.suffix} />
+        <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
+      </div>
+    </div>
+  );
+}
+
+function TestimonialCard({ testimonial: t, index }: { testimonial: typeof testimonials[number]; index: number }) {
+  const { ref, isVisible } = useScrollReveal({ threshold: 0.1 });
+  return (
+    <div ref={ref} className={cn("scroll-reveal", isVisible && "revealed")} style={{ transitionDelay: `${index * 100}ms` }}>
+      <div className="glass-strong rounded-2xl p-5 h-full flex flex-col justify-between hover:scale-[1.01] transition-all">
+        <div>
+          <Quote className="h-6 w-6 text-primary/30 mb-3" />
+          <p className="text-sm text-foreground/90 leading-relaxed mb-4">"{t.text}"</p>
+        </div>
+        <div className="flex items-center justify-between pt-3 border-t border-border/50">
+          <div>
+            <p className="font-semibold text-xs">{t.name}</p>
+            <p className="text-[11px] text-muted-foreground">{t.role}</p>
+          </div>
+          <div className="flex gap-0.5">
+            {Array.from({ length: t.rating }).map((_, j) => (
+              <Star key={j} className="h-3 w-3 fill-warning text-warning" />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ─── How It Works ─── */
 function HowItWorks() {
   const { ref, isVisible } = useScrollReveal();
@@ -178,20 +230,9 @@ function HowItWorks() {
           </h2>
         </div>
         <div className="grid md:grid-cols-3 gap-6">
-          {steps.map((s, i) => {
-            const { ref: cardRef, isVisible: cardVisible } = useScrollReveal({ threshold: 0.1 });
-            return (
-              <div key={s.step} ref={cardRef} className={cn("scroll-reveal", cardVisible && "revealed")} style={{ transitionDelay: `${i * 100}ms` }}>
-                <div className="glass-strong rounded-2xl p-6 text-center h-full">
-                  <div className="w-12 h-12 rounded-full gradient-primary flex items-center justify-center mx-auto mb-4">
-                    <span className="text-lg font-bold text-primary-foreground">{s.step}</span>
-                  </div>
-                  <h3 className="font-semibold mb-2">{s.title}</h3>
-                  <p className="text-sm text-muted-foreground">{s.desc}</p>
-                </div>
-              </div>
-            );
-          })}
+          {steps.map((s, i) => (
+            <StepCard key={s.step} step={s} index={i} />
+          ))}
         </div>
       </div>
     </section>
@@ -244,17 +285,9 @@ function SocialProofSection() {
     <section id="testimonials" className="py-16 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-14">
-          {stats.map((s, i) => {
-            const { ref, isVisible } = useScrollReveal({ threshold: 0.2 });
-            return (
-              <div key={s.label} ref={ref} className={cn("scroll-reveal-scale", isVisible && "revealed")} style={{ transitionDelay: `${i * 80}ms` }}>
-                <div className="glass-strong rounded-2xl p-5 text-center hover:glow-sm transition-all">
-                  <AnimatedCounter target={s.value} suffix={s.suffix} />
-                  <p className="text-xs text-muted-foreground mt-1">{s.label}</p>
-                </div>
-              </div>
-            );
-          })}
+          {stats.map((s, i) => (
+            <StatCard key={s.label} stat={s} index={i} />
+          ))}
         </div>
 
         <div ref={headerRef} className={cn("text-center mb-8 scroll-reveal", headerVisible && "revealed")}>
@@ -265,30 +298,9 @@ function SocialProofSection() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-4">
-          {testimonials.map((t, i) => {
-            const { ref, isVisible } = useScrollReveal({ threshold: 0.1 });
-            return (
-              <div key={t.name} ref={ref} className={cn("scroll-reveal", isVisible && "revealed")} style={{ transitionDelay: `${i * 100}ms` }}>
-                <div className="glass-strong rounded-2xl p-5 h-full flex flex-col justify-between hover:scale-[1.01] transition-all">
-                  <div>
-                    <Quote className="h-6 w-6 text-primary/30 mb-3" />
-                    <p className="text-sm text-foreground/90 leading-relaxed mb-4">"{t.text}"</p>
-                  </div>
-                  <div className="flex items-center justify-between pt-3 border-t border-border/50">
-                    <div>
-                      <p className="font-semibold text-xs">{t.name}</p>
-                      <p className="text-[11px] text-muted-foreground">{t.role}</p>
-                    </div>
-                    <div className="flex gap-0.5">
-                      {Array.from({ length: t.rating }).map((_, j) => (
-                        <Star key={j} className="h-3 w-3 fill-warning text-warning" />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+          {testimonials.map((t, i) => (
+            <TestimonialCard key={t.name} testimonial={t} index={i} />
+          ))}
         </div>
       </div>
     </section>
