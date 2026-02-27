@@ -251,6 +251,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      mask_phone: { Args: { phone: string }; Returns: string }
     }
     Enums: {
       app_role: "admin" | "user"
