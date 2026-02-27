@@ -241,7 +241,51 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      referrals_safe: {
+        Row: {
+          created_at: string | null
+          id: string | null
+          referral_code: string | null
+          referred_id: string | null
+          referred_name: string | null
+          referred_phone: string | null
+          referrer_id: string | null
+          signup_earned: number | null
+          status: string | null
+          subscription_earned: number | null
+          total_earned: number | null
+          withdrawn: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string | null
+          referral_code?: string | null
+          referred_id?: string | null
+          referred_name?: string | null
+          referred_phone?: never
+          referrer_id?: string | null
+          signup_earned?: number | null
+          status?: string | null
+          subscription_earned?: number | null
+          total_earned?: number | null
+          withdrawn?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string | null
+          referral_code?: string | null
+          referred_id?: string | null
+          referred_name?: string | null
+          referred_phone?: never
+          referrer_id?: string | null
+          signup_earned?: number | null
+          status?: string | null
+          subscription_earned?: number | null
+          total_earned?: number | null
+          withdrawn?: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {
