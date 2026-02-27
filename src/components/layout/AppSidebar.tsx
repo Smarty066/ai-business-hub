@@ -68,9 +68,15 @@ export function AppSidebar() {
   const isActive = (path: string) => location.pathname === path;
 
   const handleLogout = async () => {
-    await signOut();
-    toast.success("Logged out successfully");
-    navigate("/login");
+    try {
+      await signOut();
+      toast.success("Logged out successfully");
+      navigate("/login", { replace: true });
+    } catch (error) {
+      // Force redirect even on error
+      toast.success("Logged out successfully");
+      navigate("/login", { replace: true });
+    }
   };
 
   return (
