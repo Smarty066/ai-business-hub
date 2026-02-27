@@ -232,13 +232,12 @@ export default function Affiliate() {
                     </TableCell>
                     <TableCell>
                       {r.referred_phone ? (
-                        <a
-                          href={`tel:${r.referred_phone}`}
-                          className="flex items-center gap-1 text-sm text-primary hover:underline"
-                        >
+                        <span className="flex items-center gap-1 text-sm text-muted-foreground">
                           <Phone className="h-3 w-3" />
-                          {r.referred_phone}
-                        </a>
+                          {r.referred_phone.length > 4
+                            ? "•".repeat(r.referred_phone.length - 4) + r.referred_phone.slice(-4)
+                            : "••••"}
+                        </span>
                       ) : "—"}
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">
