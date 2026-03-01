@@ -412,7 +412,9 @@ export default function Customers() {
                         <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1">
                           <span className="flex items-center gap-1">
                             <ChannelIcon className="h-3 w-3" />
-                            {customer.phone || customer.email || "No contact"}
+                            {customer.phone
+                              ? customer.phone.slice(0, -4).replace(/./g, '•') + customer.phone.slice(-4)
+                              : customer.email || "No contact"}
                           </span>
                           <span className="flex items-center gap-1">
                             <Clock className="h-3 w-3" />
