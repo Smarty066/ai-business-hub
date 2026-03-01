@@ -71,17 +71,20 @@ export default function Notes() {
     );
   }, [notes, search]);
 
-  // Highlight matching text
-  const highlight = (text: string) => {
-    if (!search.trim()) return text;
-    const parts = text.split(new RegExp(`(${search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, "gi"));
-    return parts
-      .map((part, i) =>
-        part.toLowerCase() === search.toLowerCase()
-          ? `<mark class="bg-primary/30 rounded px-0.5">${part}</mark>`
-          : part
-      )
-      .join("");
+  // Highlight matching text (safe - no dangerouslySetInnerHTML)
+  const highlightText = (text: string) => {
+    if (!search.trim()) return <>{text}</>;
+    const escaped = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const parts = text.split(new RegExp(`(${escaped})`, "gi"));
+    return (
+      <>
+        {parts.map((part, i) =>
+          part.toLowerCase() === search.toLowerCase()
+            ? <mark key={i} className="bg-primary/30 rounded px-0.5">{part}</mark>
+            : <span key={i}>{part}</span>
+        )}
+      </>
+    );
   };
 
   const handleSave = async () => {
@@ -250,20 +253,18 @@ export default function Notes() {
             >
               <CardContent className="p-5">
                 <div className="flex items-start justify-between mb-2">
-                  <h3
-                    className="font-semibold text-sm flex-1"
-                    dangerouslySetInnerHTML={{ __html: highlight(note.title) }}
-                  />
+                  <h3 className="font-semibold text-sm flex-1">
+                    {highlightText(note.title)}
+                  </h3>
                   <div className="flex items-center gap-1 ml-2">
                     {note.pinned && (
                       <Pin className="h-3 w-3 text-primary fill-primary" />
                     )}
                   </div>
                 </div>
-                <p
-                  className="text-sm text-muted-foreground whitespace-pre-wrap line-clamp-4 mb-3"
-                  dangerouslySetInnerHTML={{ __html: highlight(note.content) }}
-                />
+                <p className="text-sm text-muted-foreground whitespace-pre-wrap line-clamp-4 mb-3">
+                  {highlightText(note.content)}
+                </p>
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-muted-foreground/60">
                     {new Date(note.updated_at).toLocaleDateString()}
