@@ -1,6 +1,8 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { isSameDay } from "date-fns";
 import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 export interface Booking {
   id: string;
@@ -52,8 +54,13 @@ export const bookingSchema = z.object({
   email: z
     .string()
     .trim()
-    .email("Please enter a valid email address")
-    .max(255, "Email must be less than 255 characters"),
+    .max(255, "Email must be less than 255 characters")
+    .refine(
+      (val) => val === "" || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
+      "Please enter a valid email address"
+    )
+    .optional()
+    .or(z.literal("")),
   phone: z
     .string()
     .trim()
@@ -72,47 +79,46 @@ export type FormErrors = Partial<Record<keyof BookingFormData, string>>;
 
 export const emptyForm: BookingFormData = { name: "", email: "", phone: "", service: "", time: "" };
 
-const initialBookings: Booking[] = [
-  {
-    id: "1",
-    name: "John Smith",
-    email: "john@example.com",
-    service: "Initial Consultation",
-    date: new Date(),
-    time: "10:00 AM",
-    status: "confirmed",
-    queuePosition: 1,
-    estimatedWait: 0,
-  },
-  {
-    id: "2",
-    name: "Sarah Johnson",
-    email: "sarah@example.com",
-    service: "Strategy Session",
-    date: new Date(),
-    time: "11:30 AM",
-    status: "pending",
-    queuePosition: 2,
-    estimatedWait: 15,
-  },
-  {
-    id: "3",
-    name: "Mike Brown",
-    email: "mike@example.com",
-    service: "Review Meeting",
-    date: new Date(),
-    time: "2:00 PM",
-    status: "pending",
-    queuePosition: 3,
-    estimatedWait: 45,
-  },
-];
-
-export function useBooking(withInitialData = true) {
+export function useBooking(useDatabase = false) {
+  const { user } = useAuth();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
-  const [bookings, setBookings] = useState<Booking[]>(withInitialData ? initialBookings : []);
+  const [bookings, setBookings] = useState<Booking[]>([]);
   const [formData, setFormData] = useState<BookingFormData>({ ...emptyForm });
   const [errors, setErrors] = useState<FormErrors>({});
+  const [loading, setLoading] = useState(false);
+
+  // Fetch bookings from DB for authenticated users
+  const fetchBookings = useCallback(async () => {
+    if (!useDatabase || !user?.id) return;
+    setLoading(true);
+    const { data } = await supabase
+      .from("bookings")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("booking_date", { ascending: true });
+
+    if (data) {
+      setBookings(
+        data.map((b: any) => ({
+          id: b.id,
+          name: b.name,
+          email: b.email || "",
+          phone: b.phone || undefined,
+          service: b.service,
+          date: new Date(b.booking_date),
+          time: b.booking_time,
+          status: b.status as Booking["status"],
+          queuePosition: b.queue_position,
+          estimatedWait: b.estimated_wait,
+        }))
+      );
+    }
+    setLoading(false);
+  }, [useDatabase, user?.id]);
+
+  useEffect(() => {
+    fetchBookings();
+  }, [fetchBookings]);
 
   const activeBookings = useMemo(
     () => bookings.filter((b) => b.status !== "cancelled" && b.status !== "completed"),
@@ -152,11 +158,11 @@ export function useBooking(withInitialData = true) {
     return result.data;
   };
 
-  const addBooking = (data: BookingFormData, date: Date) => {
+  const addBooking = async (data: BookingFormData, date: Date) => {
     const newBooking: Booking = {
       id: crypto.randomUUID(),
       name: data.name,
-      email: data.email,
+      email: data.email || "",
       phone: data.phone || undefined,
       service: serviceLabels[data.service] || data.service,
       date,
@@ -165,12 +171,36 @@ export function useBooking(withInitialData = true) {
       queuePosition: activeBookings.length + 1,
       estimatedWait: activeBookings.length * 15,
     };
+
+    if (useDatabase && user?.id) {
+      const { error } = await supabase.from("bookings").insert({
+        id: newBooking.id,
+        user_id: user.id,
+        name: newBooking.name,
+        email: newBooking.email,
+        phone: newBooking.phone || "",
+        service: newBooking.service,
+        booking_date: date.toISOString().split("T")[0],
+        booking_time: newBooking.time,
+        status: newBooking.status,
+        queue_position: newBooking.queuePosition,
+        estimated_wait: newBooking.estimatedWait,
+      });
+      if (error) {
+        console.error("Error creating booking:", error);
+        return newBooking;
+      }
+    }
+
     setBookings((prev) => [...prev, newBooking]);
     setFormData({ ...emptyForm });
     return newBooking;
   };
 
-  const cancelBooking = (id: string) => {
+  const cancelBooking = async (id: string) => {
+    if (useDatabase && user?.id) {
+      await supabase.from("bookings").update({ status: "cancelled" }).eq("id", id).eq("user_id", user.id);
+    }
     setBookings((prev) =>
       prev.map((b) => (b.id === id ? { ...b, status: "cancelled" as const } : b))
     );
@@ -197,6 +227,7 @@ export function useBooking(withInitialData = true) {
     activeBookings,
     todayBookings,
     avgWait,
+    loading,
     updateField,
     validateForm,
     addBooking,

@@ -17,7 +17,7 @@ import { useBooking, services, morningSlots, afternoonSlots } from "@/hooks/useB
 export default function Booking() {
   const {
     selectedDate, setSelectedDate, formData, errors,
-    activeBookings, todayBookings, avgWait,
+    activeBookings, todayBookings, avgWait, loading,
     updateField, validateForm, addBooking, cancelBooking, rescheduleBooking,
   } = useBooking(true);
 
@@ -176,7 +176,7 @@ export default function Booking() {
                     {errors.name && <p className="text-xs text-destructive">{errors.name}</p>}
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email">Email (Optional)</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input id="email" type="email" placeholder="adaeze@example.com" className="pl-10" maxLength={255} value={formData.email} onChange={(e) => updateField("email", e.target.value)} />

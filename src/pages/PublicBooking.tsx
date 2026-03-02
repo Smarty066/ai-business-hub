@@ -72,7 +72,7 @@ export default function PublicBooking() {
             <div className="flex h-9 w-9 items-center justify-center rounded-xl gradient-primary glow-sm">
               <Zap className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="text-lg font-bold text-gradient">Smart AI Suite</span>
+            <span className="text-lg font-bold text-gradient">OjaLink</span>
           </Link>
           <div className="flex items-center gap-3">
             <ThemeToggle />
@@ -352,7 +352,7 @@ export default function PublicBooking() {
                 </CardHeader>
                 <CardContent className="text-sm text-muted-foreground space-y-2">
                   <p>Call us at <span className="text-foreground font-medium">+234 801 000 0000</span></p>
-                  <p>Email <span className="text-foreground font-medium">bookings@smartaisuite.com</span></p>
+                  <p>Email <span className="text-foreground font-medium">bookings@ojalink.com</span></p>
                   <p className="text-xs pt-2">Mon–Fri, 9:00 AM – 5:00 PM WAT</p>
                 </CardContent>
               </Card>
@@ -364,7 +364,7 @@ export default function PublicBooking() {
       {/* Footer */}
       <footer className="border-t border-border mt-12 py-6">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} Smart AI Suite. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} OjaLink. All rights reserved.</p>
           <Link to="/" className="hover:text-foreground transition-colors">
             ← Back to Home
           </Link>
