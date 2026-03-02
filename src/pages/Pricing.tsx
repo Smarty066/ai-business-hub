@@ -24,13 +24,10 @@ const getPlans = (symbol: string, monthly: number, annual: number) => [
     highlight: false,
     cta: "Register Free",
     features: [
-      { name: "Full access for 7 days", included: true },
       { name: "Currency Converter", included: true },
       { name: "Quick Notes", included: true },
       { name: "Business Calculator", included: true },
       { name: "Affiliate Program", included: true },
-      { name: "5 AI generations/month", included: true },
-      { name: "Basic inventory tracking", included: true },
       { name: "Unlimited inventory & restock alerts", included: false },
       { name: "Advanced AI insights", included: false },
       { name: "Unlimited sales reports", included: false },

@@ -2,12 +2,18 @@ import { createContext, useContext, useState, useCallback, type ReactNode } from
 
 export type CurrencyCode = "NGN" | "USD";
 
+// Approximate exchange rate: 1 USD = 1600 NGN
+const NGN_TO_USD_RATE = 1 / 1600;
+const USD_TO_NGN_RATE = 1600;
+
 interface CurrencyContextType {
   currency: CurrencyCode;
   setCurrency: (currency: CurrencyCode) => void;
   symbol: string;
   formatAmount: (amount: number) => string;
   formatCompact: (amount: number) => string;
+  /** Convert an amount stored in NGN to the current display currency */
+  convertFromNGN: (amountInNGN: number) => number;
 }
 
 const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined);
@@ -32,6 +38,14 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
 
   const config = currencyConfig[currency];
 
+  const convertFromNGN = useCallback(
+    (amountInNGN: number) => {
+      if (currency === "NGN") return amountInNGN;
+      return Math.round(amountInNGN * NGN_TO_USD_RATE * 100) / 100;
+    },
+    [currency]
+  );
+
   const formatAmount = useCallback(
     (amount: number) => `${config.symbol}${amount.toLocaleString(config.locale)}`,
     [config]
@@ -52,7 +66,7 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
 
   return (
     <CurrencyContext.Provider
-      value={{ currency, setCurrency, symbol: config.symbol, formatAmount, formatCompact }}
+      value={{ currency, setCurrency, symbol: config.symbol, formatAmount, formatCompact, convertFromNGN }}
     >
       {children}
     </CurrencyContext.Provider>
