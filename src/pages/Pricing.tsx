@@ -5,8 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import {
-  Check, X, Zap, Crown, Sparkles, ArrowRight, Users, Megaphone,
-  Calendar, Wallet, BookOpen, MessageSquare, Shield,
+  Check, X, Zap, Crown, Sparkles, ArrowRight, Users,
+  Calendar, Wallet, BookOpen, Shield, Package, FileText, Gift,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
@@ -31,35 +31,35 @@ const getPlans = (symbol: string, monthly: number, annual: number) => [
       { name: "Affiliate Program", included: true },
       { name: "5 AI generations/month", included: true },
       { name: "Basic inventory tracking", included: true },
-      { name: "Unlimited generations", included: false },
+      { name: "Unlimited inventory & restock alerts", included: false },
       { name: "Advanced AI insights", included: false },
-      { name: "Restock alerts & forecasting", included: false },
+      { name: "Unlimited sales reports", included: false },
       { name: "PDF export", included: false },
       { name: "Priority support", included: false },
     ],
   },
   {
     id: "premium",
-    name: "Growth",
+    name: "Paid Plan",
     description: "Everything you need to scale your business",
     monthlyPrice: monthly,
     annualPrice: annual,
     icon: Crown,
     highlight: true,
-    cta: "Upgrade to Growth",
+    cta: "Upgrade to Paid Plan",
     features: [
-      { name: "Unlimited AI content generations", included: true },
-      { name: "Unlimited WhatsApp templates", included: true },
+      { name: "Unlimited AI generations", included: true },
       { name: "Full budget & finance suite", included: true },
-      { name: "Unlimited customers", included: true },
+      { name: "Unlimited customers & CRM", included: true },
       { name: "Unlimited bookings", included: true },
       { name: "Full inventory with restock alerts", included: true },
       { name: "Priority support", included: true },
       { name: "Advanced AI insights & tips", included: true },
-      { name: "Social media content calendar", included: true },
       { name: "Inventory forecasting", included: true },
+      { name: "Unlimited sales reports", included: true },
       { name: "PDF & report exports", included: true },
       { name: "Custom branding", included: true },
+      { name: "Affiliate earnings tracking", included: true },
     ],
   },
 ];
@@ -68,24 +68,24 @@ const testimonials = [
   {
     name: "Adaeze O.",
     business: "Fashion Boutique, Lagos",
-    quote: "Since switching to Growth, my customer follow-ups increased sales by 40%. The WhatsApp templates alone saved me hours every week.",
+    quote: "Since upgrading, my customer follow-ups increased sales by 40%. The CRM and booking tools saved me hours every week.",
   },
   {
     name: "Tunde A.",
     business: "Electronics Store, Abuja",
-    quote: "The restock alerts help me never run out of fast-selling items. My customers are always happy now!",
+    quote: "The restock alerts help me never run out of fast-selling items. My inventory is always organized now!",
   },
   {
     name: "Blessing E.",
     business: "Catering Service, Port Harcourt",
-    quote: "I was doing everything manually before. Now I manage bookings, finances, and marketing from one place. Game changer!",
+    quote: "I was doing everything manually before. Now I manage bookings, finances, and sales reports from one place. Game changer!",
   },
 ];
 
 const faqs = [
   {
     q: "How does the subscription work?",
-    a: "Your subscription renews automatically every month. You get uninterrupted access to all Growth features without needing to manually renew.",
+    a: "Your subscription renews automatically every month. You get uninterrupted access to all Paid Plan features without needing to manually renew.",
   },
   {
     q: "What payment methods do you accept?",
@@ -93,7 +93,7 @@ const faqs = [
   },
   {
     q: "Will I lose my data after trial?",
-    a: "Your data is always safe. After your 7-day free trial, you'll need to subscribe to Growth to continue accessing premium features. Free features (Converter, Notes, Calculator, Affiliate) remain available.",
+    a: "Your data is always safe. After your 7-day free trial, you'll need to subscribe to continue accessing premium features. Free features (Converter, Notes, Calculator, Affiliate) remain available.",
   },
   {
     q: "Is there a yearly discount?",
@@ -219,12 +219,12 @@ export default function Pricing() {
         </h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[
-            { icon: Megaphone, title: "AI Marketing", desc: "Generate ads, emails, WhatsApp & social posts in seconds" },
             { icon: Users, title: "Customer CRM", desc: "Track leads, follow-ups, and never lose a customer" },
             { icon: Calendar, title: "Smart Bookings", desc: "Manage appointments with queue predictions" },
             { icon: Wallet, title: "Budget Tracker", desc: "Monitor income, expenses & get AI savings tips" },
-            { icon: BookOpen, title: "Inventory", desc: "Track inventory, manage stock & get restock alerts" },
-            { icon: MessageSquare, title: "WhatsApp Tools", desc: "Pre-built templates for customer engagement" },
+            { icon: Package, title: "Inventory", desc: "Track stock levels, manage items & get restock alerts" },
+            { icon: FileText, title: "Sales Reports", desc: "Log daily sales and generate branded PDF reports" },
+            { icon: Gift, title: "Affiliate Program", desc: "Earn ₦1,000 per referral signup and ₦250 per subscription" },
           ].map((feature, index) => (
             <Card key={feature.title} className="glass-strong border-0 animate-fade-in" style={{ animationDelay: `${0.3 + index * 0.05}s` }}>
               <CardContent className="p-5 flex items-start gap-4">
@@ -298,7 +298,7 @@ export default function Pricing() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button variant="hero" size="lg" onClick={() => handleSubscribe("premium")}>
               <Crown className="h-5 w-5 mr-2" />
-              Start Growth Plan
+              Start Paid Plan
             </Button>
             <Button variant="outline" size="lg" asChild>
               <Link to="/dashboard">Try Free First</Link>
