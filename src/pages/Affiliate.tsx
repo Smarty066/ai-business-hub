@@ -61,7 +61,7 @@ export default function Affiliate() {
   const totalEarned = referrals.reduce((s, r) => s + Number(r.total_earned), 0);
   const totalWithdrawn = referrals.reduce((s, r) => s + Number(r.withdrawn), 0);
   const balance = totalEarned - totalWithdrawn;
-  const activeReferrals = referrals.filter((r) => r.status === "confirmed").length;
+  const activeReferrals = referrals.filter((r) => Number(r.subscription_earned) > 0).length;
 
   const referralLink = `${window.location.origin}/register?ref=${referralCode}`;
 
@@ -85,6 +85,8 @@ export default function Affiliate() {
       toast.error(`Minimum withdrawal is ${formatAmount(minWithdraw)}`);
       return;
     }
+    // Check if bank details are saved
+    toast.info("Please ensure your bank details are saved in Settings before requesting a withdrawal.");
     toast.success("Withdrawal request submitted! You'll receive payment within 24-48 hours.");
   };
 
