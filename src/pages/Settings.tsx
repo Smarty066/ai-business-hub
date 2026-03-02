@@ -112,9 +112,9 @@ export default function Settings() {
             <Separator />
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium">Marketing Content Alerts</p>
+                <p className="font-medium">Inventory Restock Alerts</p>
                 <p className="text-sm text-muted-foreground">
-                  Get notified when AI content is ready
+                  Get notified when stock is running low
                 </p>
               </div>
               <Switch defaultChecked />

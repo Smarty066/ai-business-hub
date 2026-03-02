@@ -13,13 +13,8 @@ import {
   StickyNote,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-
-const stats = [
-  { label: "Content Generated", value: "247", change: "+12%", icon: FileText },
-  { label: "Bookings This Week", value: "34", change: "+8%", icon: Calendar },
-  { label: "Savings Rate", value: "23%", change: "+5%", icon: TrendingUp },
-  { label: "Active Clients", value: "156", change: "+18%", icon: Users },
-];
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const quickActions = [
   {
@@ -57,7 +52,39 @@ const quickActions = [
 ];
 
 export default function Dashboard() {
-  const { profile } = useAuth();
+  const { profile, user } = useAuth();
+
+  // Fetch real stats from the database
+  const { data: salesCount } = useQuery({
+    queryKey: ["dashboard-sales-count", user?.id],
+    queryFn: async () => {
+      if (!user?.id) return 0;
+      const { count } = await supabase
+        .from("sales_records")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", user.id);
+      return count ?? 0;
+    },
+    enabled: !!user?.id,
+  });
+
+  const { data: notesCount } = useQuery({
+    queryKey: ["dashboard-notes-count", user?.id],
+    queryFn: async () => {
+      if (!user?.id) return 0;
+      const { count } = await supabase
+        .from("notes")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", user.id);
+      return count ?? 0;
+    },
+    enabled: !!user?.id,
+  });
+
+  const stats = [
+    { label: "Sales Recorded", value: String(salesCount ?? 0), icon: FileText },
+    { label: "Notes Created", value: String(notesCount ?? 0), icon: StickyNote },
+  ];
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
@@ -70,7 +97,7 @@ export default function Dashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid sm:grid-cols-2 gap-4 mb-8">
         {stats.map((stat, index) => (
           <Card 
             key={stat.label} 
@@ -80,7 +107,6 @@ export default function Dashboard() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <stat.icon className="h-5 w-5 text-muted-foreground" />
-                <span className="text-xs font-medium text-success">{stat.change}</span>
               </div>
               <p className="text-2xl font-bold mb-1">{stat.value}</p>
               <p className="text-sm text-muted-foreground">{stat.label}</p>
@@ -126,11 +152,10 @@ export default function Dashboard() {
             <div className="flex-1">
               <h3 className="font-semibold mb-1">AI Productivity Tip</h3>
               <p className="text-sm text-muted-foreground mb-4">
-                Your marketing content performs 23% better when generated during morning hours.
-                Consider scheduling your content creation for optimal engagement.
+                Start by adding your inventory items and recording your first sale to unlock personalized AI insights for your business.
               </p>
-              <Button variant="outline" size="sm">
-                Learn More
+              <Button variant="outline" size="sm" asChild>
+                <Link to="/inventory">Get Started</Link>
               </Button>
             </div>
           </div>
