@@ -43,7 +43,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 export default function Budget() {
   const { user } = useAuth();
-  const { symbol, formatAmount, formatCompact } = useCurrency();
+  const { symbol, formatAmount, formatCompact, convertFromNGN } = useCurrency();
   const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
     description: "",
@@ -181,7 +181,7 @@ export default function Budget() {
             <div className="flex items-center justify-between mb-2">
               <TrendingUp className="h-5 w-5 text-success" />
             </div>
-            <p className="text-2xl font-bold">{formatCompact(totalIncome)}</p>
+            <p className="text-2xl font-bold">{formatCompact(convertFromNGN(totalIncome))}</p>
             <p className="text-sm text-muted-foreground">Total Income</p>
           </CardContent>
         </Card>
@@ -190,7 +190,7 @@ export default function Budget() {
             <div className="flex items-center justify-between mb-2">
               <TrendingDown className="h-5 w-5 text-destructive" />
             </div>
-            <p className="text-2xl font-bold">{formatCompact(totalExpenses)}</p>
+            <p className="text-2xl font-bold">{formatCompact(convertFromNGN(totalExpenses))}</p>
             <p className="text-sm text-muted-foreground">Total Expenses</p>
           </CardContent>
         </Card>
@@ -199,7 +199,7 @@ export default function Budget() {
             <div className="flex items-center justify-between mb-2">
               <DollarSign className="h-5 w-5 text-primary" />
             </div>
-            <p className="text-2xl font-bold">{formatCompact(netSavings)}</p>
+            <p className="text-2xl font-bold">{formatCompact(convertFromNGN(netSavings))}</p>
             <p className="text-sm text-muted-foreground">Net Savings</p>
           </CardContent>
         </Card>
@@ -286,7 +286,7 @@ export default function Budget() {
                       </div>
                       <div className="flex items-center gap-2">
                         <p className={`font-semibold ${transaction.type === "income" ? "text-success" : "text-destructive"}`}>
-                          {transaction.type === "income" ? "+" : "-"}{formatAmount(Math.abs(Number(transaction.amount)))}
+                          {transaction.type === "income" ? "+" : "-"}{formatAmount(convertFromNGN(Math.abs(Number(transaction.amount))))}
                         </p>
                         <Button
                           variant="ghost"
@@ -374,7 +374,7 @@ export default function Budget() {
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                       </Pie>
-                      <Tooltip contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: "8px" }} formatter={(value: number) => formatAmount(value)} />
+                      <Tooltip contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: "8px" }} formatter={(value: number) => formatAmount(convertFromNGN(value))} />
                     </RePieChart>
                   </ResponsiveContainer>
                 </div>
@@ -385,7 +385,7 @@ export default function Budget() {
                         <div className="w-3 h-3 rounded-full" style={{ backgroundColor: category.color }} />
                         <span>{category.name}</span>
                       </div>
-                      <span className="text-muted-foreground">{formatAmount(category.value)}</span>
+                      <span className="text-muted-foreground">{formatAmount(convertFromNGN(category.value))}</span>
                     </div>
                   ))}
                 </div>

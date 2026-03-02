@@ -42,7 +42,7 @@ interface SalesRecord {
 
 export default function SalesReport() {
   const { user, profile } = useAuth();
-  const { formatAmount, symbol } = useCurrency();
+  const { formatAmount, symbol, convertFromNGN } = useCurrency();
   const [records, setRecords] = useState<SalesRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -168,7 +168,7 @@ export default function SalesReport() {
   };
 
   const handleShare = async () => {
-    const text = `${businessName} — ${period} Sales Report\n${getPeriodLabel()}\n\nTotal Revenue: ${formatAmount(totalRevenue)}\nItems Sold: ${totalItems}\n\n${filteredRecords.map(r => `• ${r.item_name} x${r.quantity} = ${formatAmount(Number(r.total_amount))}`).join("\n")}`;
+    const text = `${businessName} — ${period} Sales Report\n${getPeriodLabel()}\n\nTotal Revenue: ${formatAmount(convertFromNGN(totalRevenue))}\nItems Sold: ${totalItems}\n\n${filteredRecords.map(r => `• ${r.item_name} x${r.quantity} = ${formatAmount(convertFromNGN(Number(r.total_amount)))}`).join("\n")}`;
 
     if (navigator.share) {
       await navigator.share({ title: `${businessName} Sales Report`, text });
@@ -243,7 +243,7 @@ export default function SalesReport() {
         <Card className="glass-strong border-0">
           <CardContent className="p-5">
             <TrendingUp className="h-5 w-5 text-success mb-2" />
-            <p className="text-2xl font-bold">{formatAmount(totalRevenue)}</p>
+            <p className="text-2xl font-bold">{formatAmount(convertFromNGN(totalRevenue))}</p>
             <p className="text-sm text-muted-foreground">Total Revenue</p>
           </CardContent>
         </Card>
@@ -333,8 +333,8 @@ export default function SalesReport() {
                       {r.category && <p className="text-xs text-muted-foreground">{r.category}</p>}
                     </TableCell>
                     <TableCell>{r.quantity}</TableCell>
-                    <TableCell>{formatAmount(Number(r.unit_price))}</TableCell>
-                    <TableCell className="font-medium">{formatAmount(Number(r.total_amount))}</TableCell>
+                    <TableCell>{formatAmount(convertFromNGN(Number(r.unit_price)))}</TableCell>
+                    <TableCell className="font-medium">{formatAmount(convertFromNGN(Number(r.total_amount)))}</TableCell>
                     <TableCell className="text-sm text-muted-foreground">{format(parseISO(r.sale_date), "MMM d")}</TableCell>
                   </TableRow>
                 ))}

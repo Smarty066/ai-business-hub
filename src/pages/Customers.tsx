@@ -55,7 +55,7 @@ const channelIcons: Record<Customer["channel"], typeof Phone> = {
 
 export default function Customers() {
   const { user } = useAuth();
-  const { formatAmount } = useCurrency();
+  const { formatAmount, convertFromNGN } = useCurrency();
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("all");
@@ -184,7 +184,7 @@ export default function Customers() {
           { label: "Total Customers", value: stats.total, icon: Users, color: "text-primary" },
           { label: "Needs Follow-Up", value: stats.needsFollowUp, icon: AlertCircle, color: "text-warning" },
           { label: "Converted", value: stats.converted, icon: TrendingUp, color: "text-success" },
-          { label: "Revenue", value: formatAmount(stats.revenue), icon: Star, color: "text-primary" },
+          { label: "Revenue", value: formatAmount(convertFromNGN(stats.revenue)), icon: Star, color: "text-primary" },
         ].map((stat) => (
           <Card key={stat.label} className="glass-strong border-0">
             <CardContent className="p-4">
@@ -370,7 +370,7 @@ export default function Customers() {
                       )}
                       {Number(customer.total_spent) > 0 && (
                         <Badge variant="outline" className="text-xs bg-success/10 text-success border-success/30">
-                          {formatAmount(Number(customer.total_spent))}
+                          {formatAmount(convertFromNGN(Number(customer.total_spent)))}
                         </Badge>
                       )}
                       <Button

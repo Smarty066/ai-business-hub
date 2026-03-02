@@ -31,7 +31,7 @@ interface Referral {
 
 export default function Affiliate() {
   const { user } = useAuth();
-  const { currency, formatAmount } = useCurrency();
+  const { currency, formatAmount, convertFromNGN } = useCurrency();
   const [referrals, setReferrals] = useState<Referral[]>([]);
   const [referralCode, setReferralCode] = useState("");
   const [loading, setLoading] = useState(true);
@@ -58,8 +58,8 @@ export default function Affiliate() {
     fetchReferrals();
   }, [user]);
 
-  const totalEarned = referrals.reduce((s, r) => s + Number(r.total_earned), 0);
-  const totalWithdrawn = referrals.reduce((s, r) => s + Number(r.withdrawn), 0);
+  const totalEarned = convertFromNGN(referrals.reduce((s, r) => s + Number(r.total_earned), 0));
+  const totalWithdrawn = convertFromNGN(referrals.reduce((s, r) => s + Number(r.withdrawn), 0));
   const balance = totalEarned - totalWithdrawn;
   const activeReferrals = referrals.filter((r) => Number(r.subscription_earned) > 0).length;
 
@@ -250,7 +250,7 @@ export default function Affiliate() {
                         {r.status}
                       </Badge>
                     </TableCell>
-                    <TableCell className="font-medium">{formatAmount(Number(r.total_earned))}</TableCell>
+                    <TableCell className="font-medium">{formatAmount(convertFromNGN(Number(r.total_earned)))}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
