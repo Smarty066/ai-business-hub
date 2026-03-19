@@ -61,6 +61,20 @@ export default function Admin() {
   }, [isAdmin]);
 
   const fetchAll = async () => {
+    // Server-side admin verification for defense-in-depth
+    if (user) {
+      const { data: roleCheck } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id)
+        .eq("role", "admin")
+        .maybeSingle();
+      if (!roleCheck) {
+        setLoadingData(false);
+        return;
+      }
+    }
+
     const [contentRes, activityRes, usersRes] = await Promise.all([
       supabase.from("affiliate_content").select("*").order("created_at", { ascending: false }),
       supabase.from("activity_log").select("*").order("created_at", { ascending: false }).limit(100),
