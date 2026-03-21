@@ -103,7 +103,7 @@ function HeroSection() {
       <div className="relative z-10 max-w-4xl mx-auto text-center">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass mb-6 animate-fade-in">
           <Sparkles className="h-3.5 w-3.5 text-primary" />
-          <span className="text-xs font-medium text-muted-foreground">Trusted by 2,400+ Nigerian businesses</span>
+          <span className="text-xs font-medium text-muted-foreground">Trusted by 2,400+ businesses worldwide</span>
         </div>
 
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-4 animate-fade-in" style={{ animationDelay: "0.1s" }}>
@@ -113,11 +113,11 @@ function HeroSection() {
         </h1>
 
         <p className="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto mb-6 animate-fade-in" style={{ animationDelay: "0.2s" }}>
-          Bookings, customers, inventory, sales reports, budgets & affiliate earnings — all in one place. Built for Nigerian entrepreneurs.
+          Bookings, customers, inventory, sales reports, budgets & affiliate earnings — all in one place. Built for entrepreneurs everywhere.
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4 mb-8 animate-fade-in" style={{ animationDelay: "0.25s" }}>
-          {["No credit card required", "Set up in 2 minutes", "7-day free trial"].map((b) => (
+          {["Free Starter plan available", "Set up in 2 minutes", "Pay with card or crypto"].map((b) => (
             <div key={b} className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <CheckCircle2 className="h-3.5 w-3.5 text-success" />
               <span>{b}</span>
@@ -359,19 +359,19 @@ function AboutSection() {
             </h2>
             <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
               <p>
-                <strong className="text-foreground">OjaLink</strong> is an all-in-one business management platform purpose-built for Nigerian entrepreneurs, small business owners, and hustlers who want to stop juggling multiple apps and start running everything from one clean dashboard.
+                <strong className="text-foreground">OjaLink</strong> is an all-in-one business management platform built for entrepreneurs, small business owners, and hustlers who want to stop juggling multiple apps and start running everything from one clean dashboard.
               </p>
               <p>
-                Whether you sell food, run a salon, manage a logistics company, or handle any kind of business — OjaLink brings your <strong className="text-foreground">bookings, customer management, inventory tracking, sales reports, budget planning, notes, and affiliate earnings</strong> into one simple platform. No stress, no wahala.
+                Whether you sell food, run a salon, manage a logistics company, or handle any kind of business — OjaLink brings your <strong className="text-foreground">bookings, customer management, inventory tracking, sales reports, budget planning, notes, and affiliate earnings</strong> into one simple platform.
               </p>
               <p>
-                We built OjaLink because Nigerian business owners deserve tools that actually work for them. Instead of spending hours on WhatsApp coordinating bookings, scribbling sales in notebooks, or losing track of inventory — OjaLink automates and organizes everything so you can focus on what matters: <strong className="text-foreground">growing your business</strong>.
+                We built OjaLink because business owners deserve tools that actually work for them. Instead of spending hours coordinating bookings, scribbling sales in notebooks, or losing track of inventory — OjaLink automates and organizes everything so you can focus on what matters: <strong className="text-foreground">growing your business</strong>.
               </p>
               <p>
                 With OjaLink, you can let customers book appointments from your public link, track every sale and generate branded PDF reports, manage your inventory with restock alerts, keep your finances crystal clear with income/expense tracking, and even earn money by referring other business owners through our affiliate program.
               </p>
               <p>
-                OjaLink is <strong className="text-foreground">free to start</strong>, takes less than 2 minutes to set up, and works on any device. Whether you're in Lagos, Abuja, Port Harcourt, or anywhere in Nigeria — OjaLink is your business companion that never sleeps.
+                OjaLink is <strong className="text-foreground">free to start</strong>, takes less than 2 minutes to set up, and works on any device. Wherever you are in the world — OjaLink is your business companion that never sleeps.
               </p>
             </div>
           </div>
@@ -433,7 +433,7 @@ function ContactSection() {
 
 /* ─── FAQ ─── */
 const faqs = [
-  { q: "Is OjaLink really free?", a: "Yes! You get a 7-day free trial with full access to all features. After the trial, you can subscribe to our Growth plan to continue using premium features. Free features like Converter, Notes, Calculator, and Affiliate remain available." },
+  { q: "Is OjaLink really free?", a: "Yes! Our Starter plan is completely free and includes Currency Converter, Notes, Calculator, and the Affiliate Program. Upgrade to our Paid Plan anytime to unlock all premium features like CRM, inventory, sales reports, and more." },
   { q: "Do I need any technical knowledge?", a: "Not at all. OjaLink is designed for everyday business owners. If you can use WhatsApp, you can use OjaLink. Setup takes less than 2 minutes." },
   { q: "How does the affiliate program work?", a: "Share your unique referral link. You earn ₦1,000 ($0.50) when someone signs up and ₦250 ($0.25) for each month they stay subscribed. You can withdraw earnings or use them to pay for your own subscription." },
   { q: "Can my customers book appointments directly?", a: "Yes! OjaLink creates a public booking page for your business. Share the link on WhatsApp, Instagram, or your website — customers book directly and you manage everything from your dashboard." },
@@ -502,7 +502,7 @@ function CTASection() {
               Join 2,400+ businesses saving 15+ hours every week with OjaLink.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
-              {["Free 7-day trial — full access", "No credit card required", "All features included"].map((p) => (
+              {["Free Starter plan available", "Pay with card or crypto", "All premium features included"].map((p) => (
                 <div key={p} className="flex items-center gap-1.5 text-xs text-muted-foreground">
                   <CheckCircle2 className="h-3.5 w-3.5 text-success" />
                   <span>{p}</span>
@@ -554,7 +554,7 @@ function Footer() {
               <span className="text-lg font-bold text-gradient">OjaLink</span>
             </div>
             <p className="text-sm text-muted-foreground max-w-sm leading-relaxed">
-              The all-in-one business management platform built for Nigerian entrepreneurs. Run smarter, grow faster.
+              The all-in-one business management platform built for entrepreneurs everywhere. Run smarter, grow faster.
             </p>
           </div>
           <div>
@@ -580,7 +580,7 @@ function Footer() {
         </div>
         <div className="border-t border-border pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} OjaLink. All rights reserved.</p>
-          <p className="text-xs text-muted-foreground/60">Built with ❤️ for Nigerian businesses</p>
+          <p className="text-xs text-muted-foreground/60">Built with ❤️ for businesses everywhere</p>
         </div>
       </div>
     </footer>

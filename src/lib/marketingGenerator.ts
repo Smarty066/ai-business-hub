@@ -87,7 +87,7 @@ export function generateContent(data: MarketingFormData): GeneratedContent {
       },
       {
         title: "Special Offer / Promo",
-        message: `🔥 SPECIAL OFFER for ${aud}!\n\n${name} is running a limited-time promotion.\n\n🎁 Get started today and enjoy:\n• Free setup assistance\n• 7-day free trial\n• Priority support\n\n${t.cta}\n\n📲 Reply NOW to claim your spot!\n\n_Offer valid while slots last._`,
+        message: `🔥 SPECIAL OFFER for ${aud}!\n\n${name} is running a limited-time promotion.\n\n🎁 Get started today and enjoy:\n• Free setup assistance\n• Free Starter plan\n• Priority support\n\n${t.cta}\n\n📲 Reply NOW to claim your spot!\n\n_Offer valid while slots last._`,
       },
       {
         title: "Customer Testimonial Share",

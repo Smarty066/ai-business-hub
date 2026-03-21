@@ -6,12 +6,16 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import {
   Check, X, Zap, Crown, Sparkles, ArrowRight, Users,
-  Calendar, Wallet, BookOpen, Shield, Package, FileText, Gift,
+  Calendar, Wallet, Shield, Package, FileText, Gift,
+  Bitcoin, CreditCard,
 } from "lucide-react";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useCurrency, PRICING } from "@/hooks/useCurrency";
 import { CurrencySelector } from "@/components/CurrencySelector";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { useEffect } from "react";
 
 const getPlans = (symbol: string, monthly: number, annual: number) => [
   {
@@ -19,7 +23,7 @@ const getPlans = (symbol: string, monthly: number, annual: number) => [
     name: "Starter",
     description: "Perfect for getting started with your business",
     price: `${symbol}0`,
-    period: "7-day free trial",
+    period: "Free forever",
     icon: Zap,
     highlight: false,
     cta: "Register Free",
@@ -86,11 +90,11 @@ const faqs = [
   },
   {
     q: "What payment methods do you accept?",
-    a: "We accept bank transfers, card payments, and mobile money across all Nigerian banks. International cards are also supported.",
+    a: "We accept card payments via Paystack (supports Nigerian and international cards) and cryptocurrency payments via NowPayments.io (Bitcoin, USDT, and more).",
   },
   {
-    q: "Will I lose my data after trial?",
-    a: "Your data is always safe. After your 7-day free trial, you'll need to subscribe to continue accessing premium features. Free features (Converter, Notes, Calculator, Affiliate) remain available.",
+    q: "Can I switch between free and paid?",
+    a: "Your data is always safe. Free features (Converter, Notes, Calculator, Affiliate) are always available. Subscribe to unlock premium features like CRM, inventory, sales reports, and more.",
   },
   {
     q: "Is there a yearly discount?",
@@ -100,15 +104,58 @@ const faqs = [
 
 export default function Pricing() {
   const [annual, setAnnual] = useState(false);
+  const [loading, setLoading] = useState<string | null>(null);
   const { currency, symbol, formatAmount } = useCurrency();
+  const { user } = useAuth();
+  const [searchParams] = useSearchParams();
   const pricing = PRICING[currency];
   const plans = getPlans(symbol, pricing.monthly, pricing.annual);
 
-  const handleSubscribe = (planId: string) => {
+  // Handle payment callback
+  useEffect(() => {
+    const paymentStatus = searchParams.get("payment");
+    if (paymentStatus === "success") {
+      toast.success("Payment successful! Your subscription is now active.");
+    } else if (paymentStatus === "cancelled") {
+      toast.error("Payment was cancelled.");
+    }
+  }, [searchParams]);
+
+  const handleSubscribe = async (planId: string, provider: "paystack" | "nowpayments") => {
     if (planId === "free") {
       toast.success("You're already on the free plan! Start exploring.");
-    } else {
-      toast.success("Payment coming soon! All features are currently available during your trial.");
+      return;
+    }
+    if (!user) {
+      toast.error("Please log in first to subscribe.");
+      return;
+    }
+
+    setLoading(provider);
+    try {
+      const { data, error } = await supabase.functions.invoke("create-payment", {
+        body: {
+          provider,
+          plan: annual ? "annual" : "monthly",
+          currency,
+          email: user.email,
+        },
+      });
+
+      if (error) throw error;
+
+      if (provider === "paystack" && data.authorization_url) {
+        window.location.href = data.authorization_url;
+      } else if (provider === "nowpayments" && data.invoice_url) {
+        window.location.href = data.invoice_url;
+      } else {
+        toast.error("Failed to initialize payment. Please try again.");
+      }
+    } catch (err: any) {
+      console.error("Payment error:", err);
+      toast.error(err.message || "Payment failed. Please try again.");
+    } finally {
+      setLoading(null);
     }
   };
 
@@ -121,7 +168,7 @@ export default function Pricing() {
           Grow your business, <span className="text-gradient">not your expenses</span>
         </h1>
         <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-          Start with a 7-day free trial. Upgrade when you're ready. Everything you need to run and grow your business.
+          Start free. Upgrade when you're ready. Pay with card or crypto. Everything you need to run and grow your business.
         </p>
 
         {/* Currency + Annual toggle */}
@@ -180,14 +227,39 @@ export default function Pricing() {
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Button
-                variant={plan.highlight ? "hero" : "outline"}
-                className="w-full"
-                onClick={() => handleSubscribe(plan.id)}
-              >
-                {plan.cta}
-                <ArrowRight className="h-4 w-4 ml-1" />
-              </Button>
+              {plan.highlight ? (
+                <div className="space-y-2">
+                  <Button
+                    variant="hero"
+                    className="w-full"
+                    disabled={loading !== null}
+                    onClick={() => handleSubscribe(plan.id, "paystack")}
+                  >
+                    {loading === "paystack" ? "Redirecting..." : "Pay with Card"}
+                    <CreditCard className="h-4 w-4 ml-1" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    disabled={loading !== null}
+                    onClick={() => handleSubscribe(plan.id, "nowpayments")}
+                  >
+                    {loading === "nowpayments" ? "Redirecting..." : "Pay with Crypto"}
+                    <Bitcoin className="h-4 w-4 ml-1" />
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  asChild
+                >
+                  <Link to="/register">
+                    {plan.cta}
+                    <ArrowRight className="h-4 w-4 ml-1" />
+                  </Link>
+                </Button>
+              )}
               <div className="space-y-3 pt-4 border-t border-border">
                 {plan.features.map((feature) => (
                   <div key={feature.name} className="flex items-start gap-3">
@@ -293,7 +365,7 @@ export default function Pricing() {
             Join thousands of businesses already using OjaLink to scale smarter.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button variant="hero" size="lg" onClick={() => handleSubscribe("premium")}>
+            <Button variant="hero" size="lg" onClick={() => handleSubscribe("premium", "paystack")}>
               <Crown className="h-5 w-5 mr-2" />
               Start Paid Plan
             </Button>
