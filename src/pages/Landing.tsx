@@ -554,7 +554,7 @@ function Footer() {
               <span className="text-lg font-bold text-gradient">OjaLink</span>
             </div>
             <p className="text-sm text-muted-foreground max-w-sm leading-relaxed">
-              The all-in-one business management platform built for Nigerian entrepreneurs. Run smarter, grow faster.
+              The all-in-one business management platform built for entrepreneurs everywhere. Run smarter, grow faster.
             </p>
           </div>
           <div>
