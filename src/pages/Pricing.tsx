@@ -236,7 +236,7 @@ export default function Pricing() {
                     onClick={() => handleSubscribe(plan.id, "paystack")}
                   >
                     {loading === "paystack" ? "Redirecting..." : "Pay with Card"}
-                    <CreditCardIcon className="h-4 w-4 ml-1" />
+                    <CreditCard className="h-4 w-4 ml-1" />
                   </Button>
                   <Button
                     variant="outline"
