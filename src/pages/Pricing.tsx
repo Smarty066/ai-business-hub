@@ -7,11 +7,15 @@ import { Label } from "@/components/ui/label";
 import {
   Check, X, Zap, Crown, Sparkles, ArrowRight, Users,
   Calendar, Wallet, BookOpen, Shield, Package, FileText, Gift,
+  Bitcoin,
 } from "lucide-react";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useCurrency, PRICING } from "@/hooks/useCurrency";
 import { CurrencySelector } from "@/components/CurrencySelector";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { useEffect } from "react";
 
 const getPlans = (symbol: string, monthly: number, annual: number) => [
   {
