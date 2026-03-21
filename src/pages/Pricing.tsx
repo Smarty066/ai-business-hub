@@ -19,7 +19,7 @@ const getPlans = (symbol: string, monthly: number, annual: number) => [
     name: "Starter",
     description: "Perfect for getting started with your business",
     price: `${symbol}0`,
-    period: "7-day free trial",
+    period: "Free forever",
     icon: Zap,
     highlight: false,
     cta: "Register Free",
