@@ -117,7 +117,7 @@ function HeroSection() {
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4 mb-8 animate-fade-in" style={{ animationDelay: "0.25s" }}>
-          {["No credit card required", "Set up in 2 minutes", "7-day free trial"].map((b) => (
+          {["Free Starter plan available", "Set up in 2 minutes", "Pay with card or crypto"].map((b) => (
             <div key={b} className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <CheckCircle2 className="h-3.5 w-3.5 text-success" />
               <span>{b}</span>
