@@ -108,7 +108,7 @@ export default function Pricing() {
     if (planId === "free") {
       toast.success("You're already on the free plan! Start exploring.");
     } else {
-      toast.success("Payment coming soon! All features are currently available during your trial.");
+      toast.info("Redirecting to payment...");
     }
   };
 
