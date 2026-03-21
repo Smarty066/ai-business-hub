@@ -121,7 +121,7 @@ export default function Pricing() {
           Grow your business, <span className="text-gradient">not your expenses</span>
         </h1>
         <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-          Start with a 7-day free trial. Upgrade when you're ready. Everything you need to run and grow your business.
+          Start free. Upgrade when you're ready. Pay with card or crypto. Everything you need to run and grow your business.
         </p>
 
         {/* Currency + Annual toggle */}

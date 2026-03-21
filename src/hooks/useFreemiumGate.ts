@@ -1,12 +1,12 @@
 import { useState, useCallback, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 
 const STORAGE_KEY = "freemium_usage";
 const FREE_LIMIT = 5;
-const TRIAL_DAYS = 7;
 
 // Testing mode: set to true to give everyone paid access
-const TESTING_MODE = true;
+const TESTING_MODE = false;
 
 // Features available on the free plan
 const FREE_FEATURES = ["converter", "notes", "calculator", "affiliate"];
@@ -42,9 +42,10 @@ function saveUsageData(data: UsageData) {
 }
 
 export function useFreemiumGate() {
-  const { profile } = useAuth();
+  const { profile, user } = useAuth();
   const [usage, setUsage] = useState<UsageData>(getUsageData);
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [isPaidUser, setIsPaidUser] = useState(false);
 
   useEffect(() => {
     const sync = () => setUsage(getUsageData());
@@ -52,19 +53,28 @@ export function useFreemiumGate() {
     return () => window.removeEventListener("focus", sync);
   }, []);
 
-  // Trial calculation based on profile creation date
-  const registeredAt = profile?.created_at ? new Date(profile.created_at) : null;
-  const trialEndsAt = registeredAt
-    ? new Date(registeredAt.getTime() + TRIAL_DAYS * 24 * 60 * 60 * 1000)
-    : null;
-  const isTrialActive = trialEndsAt ? new Date() < trialEndsAt : true;
-  const isTrialExpired = !isTrialActive;
-  const trialDaysLeft = trialEndsAt
-    ? Math.max(0, Math.ceil((trialEndsAt.getTime() - Date.now()) / (24 * 60 * 60 * 1000)))
-    : TRIAL_DAYS;
+  // Check subscription status from database
+  useEffect(() => {
+    if (!user?.id) return;
+    const checkSubscription = async () => {
+      const { data } = await supabase
+        .from("subscriptions")
+        .select("status, current_period_end")
+        .eq("user_id", user.id)
+        .in("status", ["active", "trialing"])
+        .maybeSingle();
+      if (data && data.current_period_end) {
+        const endDate = new Date(data.current_period_end);
+        setIsPaidUser(endDate > new Date());
+      } else {
+        setIsPaidUser(false);
+      }
+    };
+    checkSubscription();
+  }, [user?.id]);
 
-  // Full access: testing mode OR active trial
-  const hasFullAccess = TESTING_MODE || isTrialActive;
+  // Full access: testing mode OR paid subscription
+  const hasFullAccess = TESTING_MODE || isPaidUser;
 
   const remaining = hasFullAccess ? FREE_LIMIT : Math.max(0, FREE_LIMIT - usage.count);
   const isLimitReached = hasFullAccess ? false : usage.count >= FREE_LIMIT;
@@ -96,10 +106,7 @@ export function useFreemiumGate() {
     tryConsume,
     isFreeFeature: (feature: string) => FREE_FEATURES.includes(feature),
     isTestingMode: TESTING_MODE,
-    isTrialActive,
-    isTrialExpired,
-    trialDaysLeft,
-    trialEndsAt,
+    isPaidUser,
     hasFullAccess,
   };
 }

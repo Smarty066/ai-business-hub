@@ -580,7 +580,7 @@ function Footer() {
         </div>
         <div className="border-t border-border pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} OjaLink. All rights reserved.</p>
-          <p className="text-xs text-muted-foreground/60">Built with ❤️ for Nigerian businesses</p>
+          <p className="text-xs text-muted-foreground/60">Built with ❤️ for businesses everywhere</p>
         </div>
       </div>
     </footer>
