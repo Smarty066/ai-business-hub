@@ -58,13 +58,13 @@ export function useFreemiumGate() {
     if (!user?.id) return;
     const checkSubscription = async () => {
       const { data } = await supabase
-        .from("subscriptions")
+        .from("subscriptions" as any)
         .select("status, current_period_end")
         .eq("user_id", user.id)
         .in("status", ["active", "trialing"])
         .maybeSingle();
-      if (data && data.current_period_end) {
-        const endDate = new Date(data.current_period_end);
+      if (data && (data as any).current_period_end) {
+        const endDate = new Date((data as any).current_period_end);
         setIsPaidUser(endDate > new Date());
       } else {
         setIsPaidUser(false);
