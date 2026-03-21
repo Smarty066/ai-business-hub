@@ -113,7 +113,7 @@ function HeroSection() {
         </h1>
 
         <p className="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto mb-6 animate-fade-in" style={{ animationDelay: "0.2s" }}>
-          Bookings, customers, inventory, sales reports, budgets & affiliate earnings — all in one place. Built for Nigerian entrepreneurs.
+          Bookings, customers, inventory, sales reports, budgets & affiliate earnings — all in one place. Built for entrepreneurs everywhere.
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4 mb-8 animate-fade-in" style={{ animationDelay: "0.25s" }}>
