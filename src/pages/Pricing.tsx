@@ -104,15 +104,58 @@ const faqs = [
 
 export default function Pricing() {
   const [annual, setAnnual] = useState(false);
+  const [loading, setLoading] = useState<string | null>(null);
   const { currency, symbol, formatAmount } = useCurrency();
+  const { user } = useAuth();
+  const [searchParams] = useSearchParams();
   const pricing = PRICING[currency];
   const plans = getPlans(symbol, pricing.monthly, pricing.annual);
 
-  const handleSubscribe = (planId: string) => {
+  // Handle payment callback
+  useEffect(() => {
+    const paymentStatus = searchParams.get("payment");
+    if (paymentStatus === "success") {
+      toast.success("Payment successful! Your subscription is now active.");
+    } else if (paymentStatus === "cancelled") {
+      toast.error("Payment was cancelled.");
+    }
+  }, [searchParams]);
+
+  const handleSubscribe = async (planId: string, provider: "paystack" | "nowpayments") => {
     if (planId === "free") {
       toast.success("You're already on the free plan! Start exploring.");
-    } else {
-      toast.info("Redirecting to payment...");
+      return;
+    }
+    if (!user) {
+      toast.error("Please log in first to subscribe.");
+      return;
+    }
+
+    setLoading(provider);
+    try {
+      const { data, error } = await supabase.functions.invoke("create-payment", {
+        body: {
+          provider,
+          plan: annual ? "annual" : "monthly",
+          currency,
+          email: user.email,
+        },
+      });
+
+      if (error) throw error;
+
+      if (provider === "paystack" && data.authorization_url) {
+        window.location.href = data.authorization_url;
+      } else if (provider === "nowpayments" && data.invoice_url) {
+        window.location.href = data.invoice_url;
+      } else {
+        toast.error("Failed to initialize payment. Please try again.");
+      }
+    } catch (err: any) {
+      console.error("Payment error:", err);
+      toast.error(err.message || "Payment failed. Please try again.");
+    } finally {
+      setLoading(null);
     }
   };
 
