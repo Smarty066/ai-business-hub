@@ -6,8 +6,8 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import {
   Check, X, Zap, Crown, Sparkles, ArrowRight, Users,
-  Calendar, Wallet, BookOpen, Shield, Package, FileText, Gift,
-  Bitcoin,
+  Calendar, Wallet, Shield, Package, FileText, Gift,
+  Bitcoin, CreditCard,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Link, useSearchParams } from "react-router-dom";
