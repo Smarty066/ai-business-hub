@@ -502,7 +502,7 @@ function CTASection() {
               Join 2,400+ businesses saving 15+ hours every week with OjaLink.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
-              {["Free 7-day trial — full access", "No credit card required", "All features included"].map((p) => (
+              {["Free Starter plan available", "Pay with card or crypto", "All premium features included"].map((p) => (
                 <div key={p} className="flex items-center gap-1.5 text-xs text-muted-foreground">
                   <CheckCircle2 className="h-3.5 w-3.5 text-success" />
                   <span>{p}</span>
