@@ -67,7 +67,7 @@ export function UpgradeDialog({ open, onOpenChange }: UpgradeDialogProps) {
           <Button variant="hero" size="lg" asChild>
             <Link to="/pricing">
               <Crown className="h-4 w-4 mr-2" />
-              Upgrade to Growth
+              Upgrade to Paid Plan
               <ArrowRight className="h-4 w-4 ml-2" />
             </Link>
           </Button>
