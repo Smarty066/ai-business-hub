@@ -227,14 +227,39 @@ export default function Pricing() {
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Button
-                variant={plan.highlight ? "hero" : "outline"}
-                className="w-full"
-                onClick={() => handleSubscribe(plan.id)}
-              >
-                {plan.cta}
-                <ArrowRight className="h-4 w-4 ml-1" />
-              </Button>
+              {plan.highlight ? (
+                <div className="space-y-2">
+                  <Button
+                    variant="hero"
+                    className="w-full"
+                    disabled={loading !== null}
+                    onClick={() => handleSubscribe(plan.id, "paystack")}
+                  >
+                    {loading === "paystack" ? "Redirecting..." : "Pay with Card"}
+                    <CreditCardIcon className="h-4 w-4 ml-1" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    disabled={loading !== null}
+                    onClick={() => handleSubscribe(plan.id, "nowpayments")}
+                  >
+                    {loading === "nowpayments" ? "Redirecting..." : "Pay with Crypto"}
+                    <Bitcoin className="h-4 w-4 ml-1" />
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  asChild
+                >
+                  <Link to="/register">
+                    {plan.cta}
+                    <ArrowRight className="h-4 w-4 ml-1" />
+                  </Link>
+                </Button>
+              )}
               <div className="space-y-3 pt-4 border-t border-border">
                 {plan.features.map((feature) => (
                   <div key={feature.name} className="flex items-start gap-3">
