@@ -103,7 +103,7 @@ function HeroSection() {
       <div className="relative z-10 max-w-4xl mx-auto text-center">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass mb-6 animate-fade-in">
           <Sparkles className="h-3.5 w-3.5 text-primary" />
-          <span className="text-xs font-medium text-muted-foreground">Trusted by 2,400+ Nigerian businesses</span>
+          <span className="text-xs font-medium text-muted-foreground">Trusted by 2,400+ businesses worldwide</span>
         </div>
 
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-4 animate-fade-in" style={{ animationDelay: "0.1s" }}>
