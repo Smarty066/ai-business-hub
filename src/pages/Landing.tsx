@@ -433,7 +433,7 @@ function ContactSection() {
 
 /* ─── FAQ ─── */
 const faqs = [
-  { q: "Is OjaLink really free?", a: "Yes! You get a 7-day free trial with full access to all features. After the trial, you can subscribe to our Growth plan to continue using premium features. Free features like Converter, Notes, Calculator, and Affiliate remain available." },
+  { q: "Is OjaLink really free?", a: "Yes! Our Starter plan is completely free and includes Currency Converter, Notes, Calculator, and the Affiliate Program. Upgrade to our Paid Plan anytime to unlock all premium features like CRM, inventory, sales reports, and more." },
   { q: "Do I need any technical knowledge?", a: "Not at all. OjaLink is designed for everyday business owners. If you can use WhatsApp, you can use OjaLink. Setup takes less than 2 minutes." },
   { q: "How does the affiliate program work?", a: "Share your unique referral link. You earn ₦1,000 ($0.50) when someone signs up and ₦250 ($0.25) for each month they stay subscribed. You can withdraw earnings or use them to pay for your own subscription." },
   { q: "Can my customers book appointments directly?", a: "Yes! OjaLink creates a public booking page for your business. Share the link on WhatsApp, Instagram, or your website — customers book directly and you manage everything from your dashboard." },
