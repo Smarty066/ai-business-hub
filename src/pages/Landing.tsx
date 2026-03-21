@@ -359,19 +359,19 @@ function AboutSection() {
             </h2>
             <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
               <p>
-                <strong className="text-foreground">OjaLink</strong> is an all-in-one business management platform purpose-built for Nigerian entrepreneurs, small business owners, and hustlers who want to stop juggling multiple apps and start running everything from one clean dashboard.
+                <strong className="text-foreground">OjaLink</strong> is an all-in-one business management platform built for entrepreneurs, small business owners, and hustlers who want to stop juggling multiple apps and start running everything from one clean dashboard.
               </p>
               <p>
-                Whether you sell food, run a salon, manage a logistics company, or handle any kind of business — OjaLink brings your <strong className="text-foreground">bookings, customer management, inventory tracking, sales reports, budget planning, notes, and affiliate earnings</strong> into one simple platform. No stress, no wahala.
+                Whether you sell food, run a salon, manage a logistics company, or handle any kind of business — OjaLink brings your <strong className="text-foreground">bookings, customer management, inventory tracking, sales reports, budget planning, notes, and affiliate earnings</strong> into one simple platform.
               </p>
               <p>
-                We built OjaLink because Nigerian business owners deserve tools that actually work for them. Instead of spending hours on WhatsApp coordinating bookings, scribbling sales in notebooks, or losing track of inventory — OjaLink automates and organizes everything so you can focus on what matters: <strong className="text-foreground">growing your business</strong>.
+                We built OjaLink because business owners deserve tools that actually work for them. Instead of spending hours coordinating bookings, scribbling sales in notebooks, or losing track of inventory — OjaLink automates and organizes everything so you can focus on what matters: <strong className="text-foreground">growing your business</strong>.
               </p>
               <p>
                 With OjaLink, you can let customers book appointments from your public link, track every sale and generate branded PDF reports, manage your inventory with restock alerts, keep your finances crystal clear with income/expense tracking, and even earn money by referring other business owners through our affiliate program.
               </p>
               <p>
-                OjaLink is <strong className="text-foreground">free to start</strong>, takes less than 2 minutes to set up, and works on any device. Whether you're in Lagos, Abuja, Port Harcourt, or anywhere in Nigeria — OjaLink is your business companion that never sleeps.
+                OjaLink is <strong className="text-foreground">free to start</strong>, takes less than 2 minutes to set up, and works on any device. Wherever you are in the world — OjaLink is your business companion that never sleeps.
               </p>
             </div>
           </div>
