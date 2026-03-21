@@ -86,11 +86,11 @@ const faqs = [
   },
   {
     q: "What payment methods do you accept?",
-    a: "We accept bank transfers, card payments, and mobile money across all Nigerian banks. International cards are also supported.",
+    a: "We accept card payments via Paystack (supports Nigerian and international cards) and cryptocurrency payments via NowPayments.io (Bitcoin, USDT, and more).",
   },
   {
-    q: "Will I lose my data after trial?",
-    a: "Your data is always safe. After your 7-day free trial, you'll need to subscribe to continue accessing premium features. Free features (Converter, Notes, Calculator, Affiliate) remain available.",
+    q: "Can I switch between free and paid?",
+    a: "Your data is always safe. Free features (Converter, Notes, Calculator, Affiliate) are always available. Subscribe to unlock premium features like CRM, inventory, sales reports, and more.",
   },
   {
     q: "Is there a yearly discount?",
