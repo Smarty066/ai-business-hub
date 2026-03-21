@@ -365,7 +365,7 @@ export default function Pricing() {
             Join thousands of businesses already using OjaLink to scale smarter.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button variant="hero" size="lg" onClick={() => handleSubscribe("premium")}>
+            <Button variant="hero" size="lg" onClick={() => handleSubscribe("premium", "paystack")}>
               <Crown className="h-5 w-5 mr-2" />
               Start Paid Plan
             </Button>
