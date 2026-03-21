@@ -36,11 +36,11 @@ export function UpgradeDialog({ open, onOpenChange }: UpgradeDialogProps) {
             <Crown className="h-8 w-8 text-primary-foreground" />
           </div>
           <DialogTitle className="text-2xl">
-            You've hit your free limit
+            Upgrade to unlock this feature
           </DialogTitle>
           <DialogDescription className="text-base">
-            You've used all <strong>5 free AI generations</strong> this month.
-            Upgrade to Growth for unlimited access.
+            This feature is available on the Paid Plan.
+            Upgrade now to get unlimited access to all premium features.
           </DialogDescription>
         </DialogHeader>
 
