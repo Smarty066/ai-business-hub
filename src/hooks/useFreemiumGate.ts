@@ -5,8 +5,8 @@ import { supabase } from "@/integrations/supabase/client";
 const STORAGE_KEY = "freemium_usage";
 const FREE_LIMIT = 5;
 
-// Testing mode: set to true to give everyone paid access
-const TESTING_MODE = false;
+// Admin email that gets full access without payment
+const ADMIN_EMAIL = "faruqabiola629@gmail.com";
 
 // Features available on the free plan
 const FREE_FEATURES = ["converter", "notes", "calculator", "affiliate"];
