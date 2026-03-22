@@ -7,9 +7,9 @@ import { CurrencyProvider } from "@/hooks/useCurrency";
 import { AuthProvider } from "@/hooks/useAuth";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { ProtectedRoute } from "@/components/layout/ProtectedRoute";
+import { PaidFeatureGate } from "@/components/layout/PaidFeatureGate";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
-// Marketing removed
 import Booking from "./pages/Booking";
 import Budget from "./pages/Budget";
 import Customers from "./pages/Customers";
@@ -54,18 +54,19 @@ const App = () => (
                 }
               >
                 <Route path="/dashboard" element={<Dashboard />} />
-                {/* Marketing route removed */}
-                <Route path="/booking" element={<Booking />} />
-                <Route path="/budget" element={<Budget />} />
-                <Route path="/customers" element={<Customers />} />
-                <Route path="/inventory" element={<Inventory />} />
-                <Route path="/pricing" element={<Pricing />} />
+                {/* Free features */}
                 <Route path="/converter" element={<CurrencyConverter />} />
                 <Route path="/calculator" element={<Calculator />} />
-                <Route path="/settings" element={<Settings />} />
                 <Route path="/notes" element={<Notes />} />
-                <Route path="/sales-report" element={<SalesReport />} />
                 <Route path="/affiliate" element={<Affiliate />} />
+                <Route path="/pricing" element={<Pricing />} />
+                <Route path="/settings" element={<Settings />} />
+                {/* Paid features - gated */}
+                <Route path="/booking" element={<PaidFeatureGate featureName="Bookings"><Booking /></PaidFeatureGate>} />
+                <Route path="/budget" element={<PaidFeatureGate featureName="Budget & Finance"><Budget /></PaidFeatureGate>} />
+                <Route path="/customers" element={<PaidFeatureGate featureName="Customer CRM"><Customers /></PaidFeatureGate>} />
+                <Route path="/inventory" element={<PaidFeatureGate featureName="Inventory Management"><Inventory /></PaidFeatureGate>} />
+                <Route path="/sales-report" element={<PaidFeatureGate featureName="Sales Reports"><SalesReport /></PaidFeatureGate>} />
                 <Route path="/admin" element={<Admin />} />
               </Route>
               <Route path="*" element={<NotFound />} />
