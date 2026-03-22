@@ -40,17 +40,17 @@ import { useAdmin } from "@/hooks/useAdmin";
 import { toast } from "sonner";
 
 const mainItems = [
-  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-  { title: "Customers", url: "/customers", icon: Users },
-  { title: "Booking", url: "/booking", icon: Calendar },
-  { title: "Budget", url: "/budget", icon: Wallet },
-  { title: "Inventory", url: "/inventory", icon: Package },
-  { title: "Sales Report", url: "/sales-report", icon: FileText },
-  { title: "Notes", url: "/notes", icon: StickyNote },
-  { title: "Converter", url: "/converter", icon: ArrowLeftRight },
-  { title: "Calculator", url: "/calculator", icon: Calculator },
-  { title: "Affiliate", url: "/affiliate", icon: Gift },
-  { title: "Pricing", url: "/pricing", icon: CreditCard },
+  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, paid: false },
+  { title: "Customers", url: "/customers", icon: Users, paid: true },
+  { title: "Booking", url: "/booking", icon: Calendar, paid: true },
+  { title: "Budget", url: "/budget", icon: Wallet, paid: true },
+  { title: "Inventory", url: "/inventory", icon: Package, paid: true },
+  { title: "Sales Report", url: "/sales-report", icon: FileText, paid: true },
+  { title: "Notes", url: "/notes", icon: StickyNote, paid: false },
+  { title: "Converter", url: "/converter", icon: ArrowLeftRight, paid: false },
+  { title: "Calculator", url: "/calculator", icon: Calculator, paid: false },
+  { title: "Affiliate", url: "/affiliate", icon: Gift, paid: false },
+  { title: "Pricing", url: "/pricing", icon: CreditCard, paid: false },
 ];
 
 const settingsItems = [
