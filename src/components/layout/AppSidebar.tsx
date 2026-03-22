@@ -132,7 +132,14 @@ export function AppSidebar() {
                   >
                     <NavLink to={item.url} end>
                       <item.icon className={cn("h-5 w-5", collapsed && "mx-auto")} />
-                      {!collapsed && <span>{item.title}</span>}
+                      {!collapsed && (
+                        <span className="flex items-center gap-2 flex-1">
+                          {item.title}
+                          {item.paid && !hasFullAccess && (
+                            <Lock className="h-3 w-3 text-muted-foreground/50 ml-auto" />
+                          )}
+                        </span>
+                      )}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
