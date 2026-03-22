@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -108,18 +108,53 @@ export default function Pricing() {
   const { currency, symbol, formatAmount } = useCurrency();
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
+  const verifiedReferenceRef = useRef<string | null>(null);
   const pricing = PRICING[currency];
   const plans = getPlans(symbol, pricing.monthly, pricing.annual);
 
   // Handle payment callback
   useEffect(() => {
     const paymentStatus = searchParams.get("payment");
-    if (paymentStatus === "success") {
-      toast.success("Payment successful! Your subscription is now active.");
-    } else if (paymentStatus === "cancelled") {
+    const reference = searchParams.get("reference") || searchParams.get("trxref");
+
+    if (paymentStatus === "cancelled") {
       toast.error("Payment was cancelled.");
+      return;
     }
-  }, [searchParams]);
+
+    if (paymentStatus !== "success") return;
+
+    if (!reference || verifiedReferenceRef.current === reference) {
+      toast.success("Payment received. We're confirming your subscription.");
+      return;
+    }
+
+    if (!user) {
+      toast.error("Please log in again so we can confirm your payment.");
+      return;
+    }
+
+    verifiedReferenceRef.current = reference;
+    setLoading("verify");
+
+    supabase.functions
+      .invoke("verify-payment", {
+        body: {
+          provider: "paystack",
+          reference,
+        },
+      })
+      .then(({ error }) => {
+        if (error) throw error;
+        toast.success("Payment successful! Your subscription is now active.");
+      })
+      .catch((err: any) => {
+        console.error("Payment verification error:", err);
+        toast.error(err.message || "We could not verify the payment yet.");
+        verifiedReferenceRef.current = null;
+      })
+      .finally(() => setLoading(null));
+  }, [searchParams, user]);
 
   const handleSubscribe = async (planId: string, provider: "paystack" | "nowpayments") => {
     if (planId === "free") {
