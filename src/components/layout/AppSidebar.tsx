@@ -40,9 +40,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { useAdmin } from "@/hooks/useAdmin";
 import { useFreemiumGate } from "@/hooks/useFreemiumGate";
 import { toast } from "sonner";
+import { getDefaultAppRoute } from "@/lib/featureAccess";
 
 const mainItems = [
-  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, paid: false },
+  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, paid: true },
   { title: "Customers", url: "/customers", icon: Users, paid: true },
   { title: "Booking", url: "/booking", icon: Calendar, paid: true },
   { title: "Budget", url: "/budget", icon: Wallet, paid: true },
@@ -67,6 +68,7 @@ export function AppSidebar() {
   const { signOut, profile } = useAuth();
   const { isAdmin } = useAdmin();
   const { hasFullAccess } = useFreemiumGate();
+  const defaultAppRoute = getDefaultAppRoute(hasFullAccess);
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -91,7 +93,7 @@ export function AppSidebar() {
       collapsible="icon"
     >
       <SidebarHeader className="border-b border-sidebar-border p-4">
-        <Link to="/" className="flex items-center gap-3">
+        <Link to={defaultAppRoute} className="flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg gradient-primary">
             <Zap className="h-5 w-5 text-primary-foreground" />
           </div>
