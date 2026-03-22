@@ -66,6 +66,7 @@ export function AppSidebar() {
   const navigate = useNavigate();
   const { signOut, profile } = useAuth();
   const { isAdmin } = useAdmin();
+  const { hasFullAccess } = useFreemiumGate();
 
   const isActive = (path: string) => location.pathname === path;
 
