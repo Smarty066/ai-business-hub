@@ -3,8 +3,13 @@ import { AppSidebar } from "./AppSidebar";
 import { Outlet, Link } from "react-router-dom";
 import { Zap } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { useFreemiumGate } from "@/hooks/useFreemiumGate";
+import { getDefaultAppRoute } from "@/lib/featureAccess";
 
 export function DashboardLayout() {
+  const { hasFullAccess } = useFreemiumGate();
+  const defaultAppRoute = getDefaultAppRoute(hasFullAccess);
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full">
@@ -13,7 +18,7 @@ export function DashboardLayout() {
           {/* Mobile top bar */}
           <div className="sticky top-0 z-40 flex items-center justify-between gap-2 border-b border-border bg-background/95 backdrop-blur-sm px-4 h-14 md:hidden">
             <SidebarTrigger className="-ml-1" />
-            <Link to="/dashboard" className="flex items-center gap-2">
+            <Link to={defaultAppRoute} className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-primary">
                 <Zap className="h-4 w-4 text-primary-foreground" />
               </div>
