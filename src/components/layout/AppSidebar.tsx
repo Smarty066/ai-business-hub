@@ -32,11 +32,13 @@ import {
   Gift,
   LogOut,
   Shield,
+  Lock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { useAdmin } from "@/hooks/useAdmin";
+import { useFreemiumGate } from "@/hooks/useFreemiumGate";
 import { toast } from "sonner";
 
 const mainItems = [
