@@ -32,25 +32,27 @@ import {
   Gift,
   LogOut,
   Shield,
+  Lock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { useAdmin } from "@/hooks/useAdmin";
+import { useFreemiumGate } from "@/hooks/useFreemiumGate";
 import { toast } from "sonner";
 
 const mainItems = [
-  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-  { title: "Customers", url: "/customers", icon: Users },
-  { title: "Booking", url: "/booking", icon: Calendar },
-  { title: "Budget", url: "/budget", icon: Wallet },
-  { title: "Inventory", url: "/inventory", icon: Package },
-  { title: "Sales Report", url: "/sales-report", icon: FileText },
-  { title: "Notes", url: "/notes", icon: StickyNote },
-  { title: "Converter", url: "/converter", icon: ArrowLeftRight },
-  { title: "Calculator", url: "/calculator", icon: Calculator },
-  { title: "Affiliate", url: "/affiliate", icon: Gift },
-  { title: "Pricing", url: "/pricing", icon: CreditCard },
+  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, paid: false },
+  { title: "Customers", url: "/customers", icon: Users, paid: true },
+  { title: "Booking", url: "/booking", icon: Calendar, paid: true },
+  { title: "Budget", url: "/budget", icon: Wallet, paid: true },
+  { title: "Inventory", url: "/inventory", icon: Package, paid: true },
+  { title: "Sales Report", url: "/sales-report", icon: FileText, paid: true },
+  { title: "Notes", url: "/notes", icon: StickyNote, paid: false },
+  { title: "Converter", url: "/converter", icon: ArrowLeftRight, paid: false },
+  { title: "Calculator", url: "/calculator", icon: Calculator, paid: false },
+  { title: "Affiliate", url: "/affiliate", icon: Gift, paid: false },
+  { title: "Pricing", url: "/pricing", icon: CreditCard, paid: false },
 ];
 
 const settingsItems = [
@@ -64,6 +66,7 @@ export function AppSidebar() {
   const navigate = useNavigate();
   const { signOut, profile } = useAuth();
   const { isAdmin } = useAdmin();
+  const { hasFullAccess } = useFreemiumGate();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -129,7 +132,14 @@ export function AppSidebar() {
                   >
                     <NavLink to={item.url} end>
                       <item.icon className={cn("h-5 w-5", collapsed && "mx-auto")} />
-                      {!collapsed && <span>{item.title}</span>}
+                      {!collapsed && (
+                        <span className="flex items-center gap-2 flex-1">
+                          {item.title}
+                          {item.paid && !hasFullAccess && (
+                            <Lock className="h-3 w-3 text-muted-foreground/50 ml-auto" />
+                          )}
+                        </span>
+                      )}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
