@@ -5,8 +5,8 @@ import { supabase } from "@/integrations/supabase/client";
 const STORAGE_KEY = "freemium_usage";
 const FREE_LIMIT = 5;
 
-// Testing mode: set to true to give everyone paid access
-const TESTING_MODE = false;
+// Admin email that gets full access without payment
+const ADMIN_EMAIL = "faruqabiola629@gmail.com";
 
 // Features available on the free plan
 const FREE_FEATURES = ["converter", "notes", "calculator", "affiliate"];
@@ -47,6 +47,8 @@ export function useFreemiumGate() {
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [isPaidUser, setIsPaidUser] = useState(false);
 
+  const isAdmin = user?.email === ADMIN_EMAIL;
+
   useEffect(() => {
     const sync = () => setUsage(getUsageData());
     window.addEventListener("focus", sync);
@@ -56,6 +58,7 @@ export function useFreemiumGate() {
   // Check subscription status from database
   useEffect(() => {
     if (!user?.id) return;
+    if (isAdmin) { setIsPaidUser(true); return; }
     const checkSubscription = async () => {
       const { data } = await supabase
         .from("subscriptions" as any)
@@ -71,10 +74,10 @@ export function useFreemiumGate() {
       }
     };
     checkSubscription();
-  }, [user?.id]);
+  }, [user?.id, isAdmin]);
 
-  // Full access: testing mode OR paid subscription
-  const hasFullAccess = TESTING_MODE || isPaidUser;
+  // Full access: admin OR paid subscription
+  const hasFullAccess = isAdmin || isPaidUser;
 
   const remaining = hasFullAccess ? FREE_LIMIT : Math.max(0, FREE_LIMIT - usage.count);
   const isLimitReached = hasFullAccess ? false : usage.count >= FREE_LIMIT;
@@ -105,7 +108,7 @@ export function useFreemiumGate() {
     openUpgrade,
     tryConsume,
     isFreeFeature: (feature: string) => FREE_FEATURES.includes(feature),
-    isTestingMode: TESTING_MODE,
+    isTestingMode: false,
     isPaidUser,
     hasFullAccess,
   };
