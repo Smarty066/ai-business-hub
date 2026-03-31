@@ -228,8 +228,10 @@ Only return valid JSON, nothing else.`
     });
   } catch (e) {
     console.error("Error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
-      status: 500,
+    const msg = e instanceof Error ? e.message : "";
+    const isAuthError = msg === "Unauthorized" || msg === "No authorization header" || msg === "Admin access required";
+    return new Response(JSON.stringify({ error: isAuthError ? "Access denied" : "Request failed" }), {
+      status: isAuthError ? 403 : 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }

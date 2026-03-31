@@ -43,14 +43,28 @@ export function useFreemiumGate() {
   const [usage, setUsage] = useState<UsageData>(getUsageData);
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [isPaidUser, setIsPaidUser] = useState(false);
-
-  const isAdmin = user?.email === ADMIN_EMAIL;
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const sync = () => setUsage(getUsageData());
     window.addEventListener("focus", sync);
     return () => window.removeEventListener("focus", sync);
   }, []);
+
+  // Check admin role from database
+  useEffect(() => {
+    if (!user?.id) return;
+    const checkAdmin = async () => {
+      const { data } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id)
+        .eq("role", "admin")
+        .maybeSingle();
+      setIsAdmin(!!data);
+    };
+    checkAdmin();
+  }, [user?.id]);
 
   // Check subscription status from database
   useEffect(() => {

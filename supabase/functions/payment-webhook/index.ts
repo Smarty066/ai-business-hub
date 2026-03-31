@@ -25,7 +25,7 @@ serve(async (req) => {
     if (provider === "paystack") {
       return await handlePaystack(body, rawBody, supabase, req);
     } else if (provider === "nowpayments") {
-      return await handleNowPayments(body, supabase);
+      return await handleNowPayments(body, rawBody, supabase, req);
     }
 
     return new Response(JSON.stringify({ error: "Unknown provider" }), {
