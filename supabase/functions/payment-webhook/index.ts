@@ -147,7 +147,48 @@ async function handlePaystack(body: any, rawBody: string, supabase: any, req: Re
   });
 }
 
-async function handleNowPayments(body: any, supabase: any) {
+async function handleNowPayments(body: any, rawBody: string, supabase: any, req: Request) {
+  // Verify IPN signature
+  const IPN_SECRET = Deno.env.get("NOWPAYMENTS_IPN_SECRET");
+  if (!IPN_SECRET) {
+    return new Response(JSON.stringify({ error: "Not configured" }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  const sig = req.headers.get("x-nowpayments-sig");
+  if (!sig) {
+    console.error("Missing NowPayments signature");
+    return new Response(JSON.stringify({ error: "Missing signature" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  // NowPayments requires sorting keys before hashing
+  const sortedBody = JSON.stringify(sortObjectKeys(JSON.parse(rawBody)));
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(IPN_SECRET),
+    { name: "HMAC", hash: "SHA-512" },
+    false,
+    ["sign"]
+  );
+  const signature = await crypto.subtle.sign("HMAC", key, encoder.encode(sortedBody));
+  const expectedHash = Array.from(new Uint8Array(signature))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+
+  if (sig !== expectedHash) {
+    console.error("Invalid NowPayments signature");
+    return new Response(JSON.stringify({ error: "Invalid signature" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   // NowPayments IPN callback
   if (body.payment_status === "finished" || body.payment_status === "confirmed") {
     const orderId = body.order_id;
