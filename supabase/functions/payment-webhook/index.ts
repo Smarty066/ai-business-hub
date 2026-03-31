@@ -249,3 +249,14 @@ async function handleNowPayments(body: any, rawBody: string, supabase: any, req:
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 }
+
+function sortObjectKeys(obj: any): any {
+  if (typeof obj !== "object" || obj === null) return obj;
+  if (Array.isArray(obj)) return obj.map(sortObjectKeys);
+  return Object.keys(obj)
+    .sort()
+    .reduce((sorted: any, key: string) => {
+      sorted[key] = sortObjectKeys(obj[key]);
+      return sorted;
+    }, {});
+}
