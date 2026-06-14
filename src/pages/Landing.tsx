@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -589,8 +590,26 @@ function Footer() {
 
 /* ─── Main Landing Page ─── */
 export default function Landing() {
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
   return (
     <div className="min-h-screen">
+      <Helmet>
+        <title>OjaLink — All-in-one Business Suite for Nigerian Entrepreneurs</title>
+        <meta name="description" content="OjaLink helps Nigerian entrepreneurs manage bookings, customers, inventory, sales reports, budgets, and more from one simple dashboard." />
+        <link rel="canonical" href="https://ojalink.lovable.app/" />
+        <meta property="og:title" content="OjaLink — All-in-one Business Suite" />
+        <meta property="og:description" content="Run your whole business from one dashboard: bookings, CRM, inventory, sales reports, and budgeting built for Nigerian hustlers." />
+        <meta property="og:url" content="https://ojalink.lovable.app/" />
+        <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
+      </Helmet>
       <Navbar />
       <HeroSection />
       <FeaturesSection />
