@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -77,6 +78,15 @@ export default function Register() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12">
+      <Helmet>
+        <title>Create Your OjaLink Account — Register Free</title>
+        <meta name="description" content="Register a free OjaLink account and start managing bookings, customers, inventory, and sales in one dashboard built for Nigerian businesses." />
+        <link rel="canonical" href="https://ojalink.lovable.app/register" />
+        <meta property="og:title" content="Create Your OjaLink Account" />
+        <meta property="og:description" content="Register free and start managing your business smarter with OjaLink." />
+        <meta property="og:url" content="https://ojalink.lovable.app/register" />
+      </Helmet>
+      <h1 className="sr-only">Create your OjaLink account</h1>
       <div className="absolute inset-0 gradient-hero" />
       <div className="absolute inset-0 gradient-glow" />
 
@@ -150,6 +160,7 @@ export default function Register() {
                 />
                 <button
                   type="button"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   onClick={() => setShowPassword(!showPassword)}
                 >

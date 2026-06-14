@@ -1,0 +1,15 @@
+# OjaLink
+
+> OjaLink is an all-in-one business productivity suite built for Nigerian entrepreneurs and small business owners — combining CRM, bookings, inventory, sales reporting, budgeting, and free utilities in one dashboard.
+
+## Pages
+
+- [Home](/): Product overview, features, testimonials, and pricing summary.
+- [Pricing](/pricing): Free Starter plan and Paid Plan details with Paystack and crypto payment options.
+- [Public Booking](/book): Customer-facing page to book appointments with an OjaLink business.
+- [Register](/register): Create a new OjaLink account.
+- [Login](/login): Log in to an existing OjaLink account.
+
+## Optional
+
+- [Forgot Password](/forgot-password): Request a password reset link.

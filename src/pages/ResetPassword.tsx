@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -69,6 +70,14 @@ export default function ResetPassword() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12">
+      <Helmet>
+        <title>Set a New Password — OjaLink</title>
+        <meta name="description" content="Choose a new password for your OjaLink account to regain access to your business dashboard." />
+        <link rel="canonical" href="https://ojalink.lovable.app/reset-password" />
+        <meta property="og:title" content="Set a New OjaLink Password" />
+        <meta property="og:url" content="https://ojalink.lovable.app/reset-password" />
+      </Helmet>
+      <h1 className="sr-only">Set a new OjaLink password</h1>
       <div className="absolute inset-0 gradient-hero" />
       <div className="absolute inset-0 gradient-glow" />
 
@@ -97,6 +106,7 @@ export default function ResetPassword() {
                 />
                 <button
                   type="button"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
                   onClick={() => setShowPassword(!showPassword)}
                 >
