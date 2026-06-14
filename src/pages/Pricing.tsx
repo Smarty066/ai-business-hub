@@ -197,6 +197,14 @@ export default function Pricing() {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
+      <Helmet>
+        <title>OjaLink Pricing — Free Starter & Paid Plans</title>
+        <meta name="description" content="Compare OjaLink's free Starter plan and Paid Plan. Pay monthly or yearly with card or crypto. Built for Nigerian businesses." />
+        <link rel="canonical" href="https://ojalink.lovable.app/pricing" />
+        <meta property="og:title" content="OjaLink Pricing — Free & Paid Plans" />
+        <meta property="og:description" content="Start free. Upgrade when you're ready. Pay with card or crypto." />
+        <meta property="og:url" content="https://ojalink.lovable.app/pricing" />
+      </Helmet>
       {/* Header */}
       <div className="text-center mb-12">
         <Badge className="bg-primary/10 text-primary mb-4">Simple Pricing</Badge>
