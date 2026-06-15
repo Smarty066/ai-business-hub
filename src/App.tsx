@@ -54,7 +54,7 @@ const App = () => (
                   </ProtectedRoute>
                 }
               >
-                <Route path="/dashboard" element={<PaidFeatureGate featureName={PAID_FEATURES["/dashboard"]}><Dashboard /></PaidFeatureGate>} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 {/* Free features */}
                 <Route path="/converter" element={<CurrencyConverter />} />
                 <Route path="/calculator" element={<Calculator />} />
