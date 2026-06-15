@@ -1,7 +1,6 @@
 export const FREE_FEATURE_ROUTES = ["/converter", "/calculator", "/notes", "/affiliate"] as const;
 
 export const PAID_FEATURES = {
-  "/dashboard": "Business Dashboard",
   "/booking": "Bookings",
   "/budget": "Budget & Finance",
   "/customers": "Customer CRM",
@@ -9,8 +8,8 @@ export const PAID_FEATURES = {
   "/sales-report": "Sales Reports",
 } as const;
 
-export function getDefaultAppRoute(hasFullAccess: boolean) {
-  return hasFullAccess ? "/dashboard" : "/notes";
+export function getDefaultAppRoute(_hasFullAccess: boolean) {
+  return "/dashboard";
 }
 
 export function isPaidFeatureRoute(path: string) {
